@@ -3,6 +3,18 @@ const express = require("express");
 const { createClient } = require("@supabase/supabase-js");
 
 const app = express();
+
+// ✅ ADD THIS CORS CONFIGURATION
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  res.header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS');
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(200);
+  }
+  next();
+});
+
 app.use(express.json());
 
 const supabase = createClient(
@@ -10,6 +22,7 @@ const supabase = createClient(
   process.env.SUPABASE_KEY
 );
 
+// Validate key endpoint
 app.post("/validate", async (req, res) => {
   const { key, hwid } = req.body;
 
@@ -45,7 +58,7 @@ app.post("/validate", async (req, res) => {
   return res.json({ valid: true, message: "Key accepted." });
 });
 
-// NEW GENERATE KEY ENDPOINT - ADDED HERE
+// Generate key endpoint
 app.post("/generate-key", async (req, res) => {
   try {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -69,15 +82,14 @@ app.post("/generate-key", async (req, res) => {
       .select();
       
     if (error) {
-      console.error("Error saving key:", error);
-      return res.status(500).json({ error: "Failed to create key" });
+      console.error("Supabase error:", error);
+      return res.status(500).json({ error: "Failed to save key" });
     }
     
-    console.log("Generated new key:", key);
     res.json({ key: data[0].key });
     
   } catch (error) {
-    console.error("Error:", error);
+    console.error("Server error:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 });
