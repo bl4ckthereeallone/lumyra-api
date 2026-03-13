@@ -238,7 +238,7 @@ tr:hover td{background:#161616}
 
 <script>
 const API = window.location.origin;
-let token = sessionStorage.getItem("_lt") || "";
+let token = localStorage.getItem("_lt") || "";
 let allKeys = [];
 let toastT;
 
@@ -274,7 +274,7 @@ async function login() {
     }
 
     token = d.token;
-    sessionStorage.setItem("_lt", token);
+    localStorage.setItem("_lt", token);
     document.getElementById("pwInput").value = "";
     show("dashPage");
     await loadKeys();
@@ -289,7 +289,7 @@ async function login() {
 
 function logout() {
   token = "";
-  sessionStorage.removeItem("_lt");
+  localStorage.removeItem("_lt");
   allKeys = [];
   show("loginPage");
 }
