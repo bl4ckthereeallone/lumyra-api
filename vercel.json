@@ -1,0 +1,7 @@
+{
+  "rewrites": [
+    { "source": "/validate", "destination": "/api/validate" },
+    { "source": "/keys",     "destination": "/api/keys"     },
+    { "source": "/health",   "destination": "/api/health"   }
+  ]
+}
