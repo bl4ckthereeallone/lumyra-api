@@ -1,20 +1,22 @@
 const { createClient } = require("@supabase/supabase-js");
 const crypto = require("crypto");
-const { sessions } = require("./login");
 
-const supabase = createClient(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_KEY
-);
+const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
 
-function verifySession(req) {
+async function verifySession(req) {
   const auth = req.headers["authorization"] || "";
   const token = auth.replace("Bearer ", "").trim();
   if (!token) return false;
-  const session = sessions.get(token);
-  if (!session) return false;
-  if (Date.now() > session.expires) {
-    sessions.delete(token);
+
+  const { data } = await supabase
+    .from("sessions")
+    .select("expires_at")
+    .eq("token", token)
+    .single();
+
+  if (!data) return false;
+  if (new Date(data.expires_at) < new Date()) {
+    await supabase.from("sessions").delete().eq("token", token);
     return false;
   }
   return true;
@@ -26,14 +28,13 @@ function generateKey() {
 }
 
 module.exports = async function handler(req, res) {
-  res.setHeader("Access-Control-Allow-Origin", req.headers.origin || "*");
-  res.setHeader("Access-Control-Allow-Credentials", "true");
+  res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
   if (req.method === "OPTIONS") return res.status(200).end();
 
-  if (!verifySession(req))
+  if (!(await verifySession(req)))
     return res.status(401).json({ error: "Unauthorized." });
 
   if (req.method === "GET") {
@@ -47,7 +48,7 @@ module.exports = async function handler(req, res) {
   }
 
   if (req.method === "POST") {
-    const { amount = 1, expiresInDays } = req.body;
+    const { amount = 1, expiresInDays } = req.body || {};
     const clamped = Math.min(Math.max(parseInt(amount) || 1, 1), 100);
 
     const keys = Array.from({ length: clamped }, () => ({
@@ -55,7 +56,7 @@ module.exports = async function handler(req, res) {
       used: false,
       hwid: null,
       used_at: null,
-      expires_at: new Date(Date.now() + ((parseInt(expiresInDays) ?? 1) * 86400000)).toISOString(),
+      expires_at: new Date(Date.now() + ((parseInt(expiresInDays) || 1) * 86400000)).toISOString(),
       created_at: new Date().toISOString(),
     }));
 
@@ -65,7 +66,7 @@ module.exports = async function handler(req, res) {
   }
 
   if (req.method === "DELETE") {
-    const { id } = req.body;
+    const { id } = req.body || {};
     if (!id) return res.status(400).json({ error: "Missing id." });
     const { error } = await supabase.from("keys").delete().eq("id", id);
     if (error) return res.status(500).json({ error: error.message });
