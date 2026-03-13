@@ -6,8 +6,7 @@ const supabase = createClient(
   process.env.SUPABASE_KEY
 );
 
-if (!ADMIN_PASSWORD || req.headers["x-admin-password"] !== ADMIN_PASSWORD)
-  return res.status(401).json({ error: "Unauthorized.", debug: !!ADMIN_PASSWORD });
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 
 function generateKey() {
   const seg = () => crypto.randomBytes(3).toString("hex").toUpperCase();
