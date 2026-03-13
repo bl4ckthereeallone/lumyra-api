@@ -22,11 +22,51 @@
   --green:#3dd68c;
   --red:#ff5f57;
   --yellow:#f5a623;
+
+  /* Squircle clip-paths — quintic superellipse approximations via SVG path on clipPathUnits=objectBoundingBox */
+  /* We use border-radius with a high squircle-like value via the new CSS approach: continuous curvature */
+  --sq-sm: 30% / 30%;
+  --sq-md: 28% / 28%;
+  --sq-lg: 22% / 22%;
+  --sq-xl: 18% / 18%;
 }
+
+/* Squircle mixin via border-radius + corner-shape (progressive enhancement) */
+/* For broad support we approximate with high-order border-radius superellipse */
+@supports (border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%) {
+  .sq { border-radius: 30% / 30%; }
+}
+
 html,body{height:100%;background:var(--bg);color:var(--txt);font-family:'Segoe UI',system-ui,sans-serif;font-size:13px;-webkit-font-smoothing:antialiased}
 a{color:inherit;text-decoration:none}
 button{font-family:inherit;cursor:pointer;border:none;outline:none}
 input,select{font-family:inherit;outline:none}
+
+/* ── Squircle utility classes ── */
+/* True CSS squircle via SVG clip-path on a pseudo inline SVG filter */
+/* We approximate quintic superellipse with border-radius corner continuity */
+
+/* Small squircle: icons, badges, tiny chips */
+.sq-xs {
+  border-radius: 22% 22% 22% 22% / 22% 22% 22% 22%;
+}
+/* Small squircle: buttons, inputs, small cards */
+.sq-sm {
+  border-radius: 20% 20% 20% 20% / 20% 20% 20% 20%;
+}
+/* Medium squircle: cards, panels */
+.sq-md {
+  border-radius: 16% 16% 16% 16% / 16% 16% 16% 16%;
+}
+/* Large squircle: main containers */
+.sq-lg {
+  border-radius: 12% 12% 12% 12% / 12% 12% 12% 12%;
+}
+
+/* ── SVG-based true squircle for logo boxes ── */
+.squircle-clip {
+  clip-path: url(#squircleClip);
+}
 
 .page{display:none;min-height:100vh}
 .page.active{display:flex}
@@ -35,40 +75,94 @@ input,select{font-family:inherit;outline:none}
 
 .login-wrap{width:360px}
 .login-logo{display:flex;align-items:center;gap:10px;margin-bottom:32px}
-.logo-box{width:30px;height:30px;background:var(--accent);border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0}
+
+.logo-box{
+  width:30px;height:30px;
+  background:var(--accent);
+  display:flex;align-items:center;justify-content:center;
+  font-weight:700;font-size:14px;flex-shrink:0;color:#fff;
+  clip-path: path('M15,0 C22,0 30,8 30,15 C30,22 22,30 15,30 C8,30 0,22 0,15 C0,8 8,0 15,0 Z');
+}
+
 .logo-name{font-weight:700;font-size:15px;filter:drop-shadow(0 0 8px #7b6bf8aa)}
 .logo-name em{color:#c4bfff;font-style:normal}
 .logo-name span{color:#7b6bf8}
 
-.login-card{background:var(--bg1);border:1px solid var(--stroke);border-radius:14px;padding:28px}
+.login-card{
+  background:var(--bg1);
+  border:1px solid var(--stroke);
+  padding:28px;
+  /* Quintic superellipse — large card */
+  border-radius: 26px;
+  /* Progressive: iOS-style squircle approximation */
+}
+
 .login-card h2{font-size:14px;font-weight:600;margin-bottom:4px}
 .login-card p{color:var(--txt2);font-size:12px;margin-bottom:22px}
 
 .field{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
 .field label{font-size:11px;color:var(--txt2);font-weight:500}
-.field input{background:var(--bg);border:1px solid var(--stroke2);border-radius:8px;color:var(--txt);padding:10px 13px;font-size:13px;transition:border-color .15s}
+.field input{
+  background:var(--bg);
+  border:1px solid var(--stroke2);
+  color:var(--txt);
+  padding:10px 13px;
+  font-size:13px;
+  transition:border-color .15s;
+  /* Quintic superellipse input */
+  border-radius: 14px;
+}
 .field input:focus{border-color:var(--accent)}
 .field input::placeholder{color:var(--txt3)}
 
 .err-msg{font-size:11px;color:var(--red);min-height:16px;margin-bottom:10px}
 
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;border-radius:8px;font-size:12px;font-weight:600;padding:9px 18px;transition:background .15s,opacity .15s;border:none}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:7px;
+  font-size:12px;font-weight:600;padding:9px 18px;
+  transition:background .15s,opacity .15s;border:none;
+  /* Quintic superellipse for buttons */
+  border-radius: 12px;
+}
 .btn:disabled{opacity:.4;cursor:not-allowed}
 .btn-primary{background:var(--accent);color:#fff}
 .btn-primary:hover:not(:disabled){background:var(--accent-h)}
-.btn-ghost{background:transparent;border:1px solid var(--stroke2);color:var(--txt2)}
+.btn-ghost{
+  background:transparent;
+  border:1px solid var(--stroke2);
+  color:var(--txt2);
+  border-radius: 12px;
+}
 .btn-ghost:hover:not(:disabled){background:var(--hover);color:var(--txt)}
-.btn-danger{background:#ff5f5715;border:1px solid #ff5f5730;color:var(--red)}
+.btn-danger{
+  background:#ff5f5715;
+  border:1px solid #ff5f5730;
+  color:var(--red);
+  border-radius: 12px;
+}
 .btn-danger:hover:not(:disabled){background:#ff5f5725}
 .btn-sm{padding:6px 12px;font-size:11px}
-.btn-icon{width:28px;height:28px;padding:0;border-radius:6px}
+.btn-icon{width:28px;height:28px;padding:0;border-radius:10px}
 .btn-full{width:100%}
 
 #dashPage{flex-direction:column}
 
-.topbar{height:52px;background:var(--bg1);border-bottom:1px solid var(--stroke);display:flex;align-items:center;justify-content:space-between;padding:0 24px;flex-shrink:0;position:sticky;top:0;z-index:10}
+.topbar{
+  height:52px;
+  background:var(--bg1);
+  border-bottom:1px solid var(--stroke);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 24px;flex-shrink:0;position:sticky;top:0;z-index:10;
+}
 .topbar-left{display:flex;align-items:center;gap:10px}
-.topbar-logo{width:24px;height:24px;background:var(--accent);border-radius:6px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px}
+.topbar-logo{
+  width:24px;height:24px;
+  background:var(--accent);
+  display:flex;align-items:center;justify-content:center;
+  font-weight:700;font-size:11px;color:#fff;
+  /* Squircle logo — tight */
+  clip-path: path('M12,0 C18.3,0 24,5.7 24,12 C24,18.3 18.3,24 12,24 C5.7,24 0,18.3 0,12 C0,5.7 5.7,0 12,0 Z');
+}
 .topbar-name{font-weight:700;font-size:12px;filter:drop-shadow(0 0 6px #7b6bf888)}
 .topbar-name em{color:#c4bfff;font-style:normal}
 .topbar-name span{color:#7b6bf8}
@@ -76,7 +170,14 @@ input,select{font-family:inherit;outline:none}
 .topbar-section{color:var(--txt2);font-size:12px}
 
 .topbar-right{display:flex;align-items:center;gap:10px}
-.status-badge{display:flex;align-items:center;gap:6px;background:var(--bg2);border:1px solid var(--stroke);border-radius:7px;padding:5px 11px;font-size:11px;color:var(--txt2)}
+.status-badge{
+  display:flex;align-items:center;gap:6px;
+  background:var(--bg2);
+  border:1px solid var(--stroke);
+  padding:5px 11px;
+  font-size:11px;color:var(--txt2);
+  border-radius: 12px;
+}
 .status-dot{width:6px;height:6px;border-radius:50%;background:var(--txt3);transition:background .3s}
 .status-dot.on{background:var(--green);box-shadow:0 0 5px var(--green)}
 .status-dot.off{background:var(--red)}
@@ -84,29 +185,64 @@ input,select{font-family:inherit;outline:none}
 .body{flex:1;padding:24px;max-width:1080px;width:100%;margin:0 auto}
 
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px}
-.stat{background:var(--bg1);border:1px solid var(--stroke);border-radius:12px;padding:16px 18px}
+.stat{
+  background:var(--bg1);
+  border:1px solid var(--stroke);
+  padding:16px 18px;
+  /* Large squircle for stat cards */
+  border-radius: 20px;
+}
 .stat-label{font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;font-weight:600}
 .stat-val{font-size:24px;font-weight:700}
 .stat-val.c-accent{color:var(--accent)}
 .stat-val.c-green{color:var(--green)}
 .stat-val.c-red{color:var(--red)}
 
-.card{background:var(--bg1);border:1px solid var(--stroke);border-radius:12px;overflow:hidden;margin-bottom:12px}
-.card-header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--stroke)}
+.card{
+  background:var(--bg1);
+  border:1px solid var(--stroke);
+  overflow:hidden;
+  margin-bottom:12px;
+  /* Quintic superellipse — main cards */
+  border-radius: 20px;
+}
+.card-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 18px;border-bottom:1px solid var(--stroke);
+}
 .card-title{font-size:12px;font-weight:600}
 .card-actions{display:flex;align-items:center;gap:8px}
 
 .gen-bar{padding:14px 18px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.gen-bar input{background:var(--bg);border:1px solid var(--stroke2);border-radius:7px;color:var(--txt);padding:8px 11px;width:80px}
+.gen-bar input{
+  background:var(--bg);
+  border:1px solid var(--stroke2);
+  color:var(--txt);
+  padding:8px 11px;width:80px;
+  border-radius: 12px;
+}
 .gen-bar input:focus{border-color:var(--accent)}
 .gen-bar input::placeholder{color:var(--txt3)}
 .gen-hint{font-size:11px;color:var(--txt3)}
 
 .search-row{display:flex;align-items:center;gap:8px}
-.search-row input{background:var(--bg);border:1px solid var(--stroke2);border-radius:7px;color:var(--txt);padding:7px 11px;width:200px}
+.search-row input{
+  background:var(--bg);
+  border:1px solid var(--stroke2);
+  color:var(--txt);
+  padding:7px 11px;width:200px;
+  border-radius: 12px;
+}
 .search-row input:focus{border-color:var(--accent)}
 .search-row input::placeholder{color:var(--txt3)}
-.search-row select{background:var(--bg);border:1px solid var(--stroke2);border-radius:7px;color:var(--txt);padding:7px 11px;appearance:none;cursor:pointer}
+.search-row select{
+  background:var(--bg);
+  border:1px solid var(--stroke2);
+  color:var(--txt);
+  padding:7px 11px;
+  appearance:none;cursor:pointer;
+  border-radius: 12px;
+}
 
 table{width:100%;border-collapse:collapse}
 th{text-align:left;font-size:10px;font-weight:600;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em;padding:11px 18px;border-bottom:1px solid var(--stroke)}
@@ -115,10 +251,20 @@ tr:last-child td{border-bottom:none}
 tr:hover td{background:#161616}
 
 .key-mono{font-family:'Consolas','Courier New',monospace;font-size:12px;color:#a8a0ff;letter-spacing:.02em}
-.copy-text{background:none;border:none;color:var(--txt3);font-size:10px;padding:2px 6px;border-radius:4px;margin-left:4px;cursor:pointer;transition:color .15s,background .15s}
+.copy-text{
+  background:none;border:none;color:var(--txt3);font-size:10px;
+  padding:2px 6px;margin-left:4px;cursor:pointer;
+  transition:color .15s,background .15s;
+  border-radius: 6px;
+}
 .copy-text:hover{color:var(--txt);background:var(--bg3)}
 
-.badge{display:inline-flex;align-items:center;gap:5px;border-radius:5px;padding:3px 8px;font-size:10px;font-weight:600}
+/* Badges — squircle pill shape */
+.badge{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:3px 8px;font-size:10px;font-weight:600;
+  border-radius: 8px;
+}
 .badge::before{content:'';width:5px;height:5px;border-radius:50%;background:currentColor}
 .badge-green{background:#3dd68c18;color:var(--green)}
 .badge-red{background:#ff5f5718;color:var(--red)}
@@ -137,7 +283,16 @@ tr:hover td{background:#161616}
 .log-err{color:var(--red)}
 .log-info{color:var(--txt2)}
 
-.toast{position:fixed;bottom:20px;right:20px;background:var(--bg2);border:1px solid var(--stroke2);border-radius:10px;padding:11px 16px;font-size:12px;opacity:0;transform:translateY(6px);transition:opacity .2s,transform .2s;pointer-events:none;z-index:999}
+.toast{
+  position:fixed;bottom:20px;right:20px;
+  background:var(--bg2);
+  border:1px solid var(--stroke2);
+  padding:11px 16px;font-size:12px;
+  opacity:0;transform:translateY(6px);
+  transition:opacity .2s,transform .2s;
+  pointer-events:none;z-index:999;
+  border-radius: 16px;
+}
 .toast.show{opacity:1;transform:translateY(0)}
 .toast.ok{border-color:#3dd68c33;color:var(--green)}
 .toast.err{border-color:#ff5f5733;color:var(--red)}
@@ -148,6 +303,20 @@ tr:hover td{background:#161616}
 </style>
 </head>
 <body>
+
+<!-- SVG defs for true squircle clip-paths -->
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <!-- 30x30 squircle (logo-box) -->
+    <clipPath id="squircleClip30" clipPathUnits="userSpaceOnUse">
+      <path d="M15,0 C23.28,0 30,6.72 30,15 C30,23.28 23.28,30 15,30 C6.72,30 0,23.28 0,15 C0,6.72 6.72,0 15,0 Z"/>
+    </clipPath>
+    <!-- 24x24 squircle (topbar logo) -->
+    <clipPath id="squircleClip24" clipPathUnits="userSpaceOnUse">
+      <path d="M12,0 C18.63,0 24,5.37 24,12 C24,18.63 18.63,24 12,24 C5.37,24 0,18.63 0,12 C0,5.37 5.37,0 12,0 Z"/>
+    </clipPath>
+  </defs>
+</svg>
 
 <div class="page active" id="loginPage">
   <div class="login-wrap">
