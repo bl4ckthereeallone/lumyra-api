@@ -65,13 +65,33 @@ module.exports = async function handler(req, res) {
     return res.json(data);
   }
 
-  if (req.method === "DELETE") {
-    const { id } = req.body || {};
-    if (!id) return res.status(400).json({ error: "Missing id." });
-    const { error } = await supabase.from("keys").delete().eq("id", id);
+if (req.method === "DELETE") {
+  const { id, deleteAll, deleteAmount } = req.body || {};
+
+  if (deleteAll) {
+    const { data: all, error: fetchErr } = await supabase.from("keys").select("id");
+    if (fetchErr) return res.status(500).json({ error: fetchErr.message });
+    const { error } = await supabase.from("keys").delete().neq("id", "00000000-0000-0000-0000-000000000000");
     if (error) return res.status(500).json({ error: error.message });
-    return res.json({ success: true });
+    return res.json({ success: true, deleted: all.length });
   }
+
+  if (deleteAmount) {
+    const amt = Math.min(Math.max(parseInt(deleteAmount) || 1, 1), 1000);
+    const { data: oldest, error: fetchErr } = await supabase
+      .from("keys").select("id").order("created_at", { ascending: true }).limit(amt);
+    if (fetchErr) return res.status(500).json({ error: fetchErr.message });
+    const ids = oldest.map(k => k.id);
+    const { error } = await supabase.from("keys").delete().in("id", ids);
+    if (error) return res.status(500).json({ error: error.message });
+    return res.json({ success: true, deleted: ids.length });
+  }
+
+  if (!id) return res.status(400).json({ error: "Missing id." });
+  const { error } = await supabase.from("keys").delete().eq("id", id);
+  if (error) return res.status(500).json({ error: error.message });
+  return res.json({ success: true });
+}
 
   return res.status(405).end();
 };
