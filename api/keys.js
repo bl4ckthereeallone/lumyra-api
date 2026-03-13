@@ -41,9 +41,7 @@ export default async function handler(req, res) {
       used: false,
       hwid: null,
       used_at: null,
-      expires_at: expiresInDays
-        ? new Date(Date.now() + expiresInDays * 86400000).toISOString()
-        : null,
+     expires_at: new Date(Date.now() + ((expiresInDays ?? 1) * 86400000)).toISOString(),
       created_at: new Date().toISOString(),
     }));
 
