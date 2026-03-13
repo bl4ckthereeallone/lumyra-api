@@ -1,26 +1,39 @@
-import { createClient } from "@supabase/supabase-js";
-import crypto from "crypto";
+const { createClient } = require("@supabase/supabase-js");
+const crypto = require("crypto");
+const { sessions } = require("./login");
 
 const supabase = createClient(
   process.env.SUPABASE_URL,
   process.env.SUPABASE_KEY
 );
 
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
+function verifySession(req) {
+  const auth = req.headers["authorization"] || "";
+  const token = auth.replace("Bearer ", "").trim();
+  if (!token) return false;
+  const session = sessions.get(token);
+  if (!session) return false;
+  if (Date.now() > session.expires) {
+    sessions.delete(token);
+    return false;
+  }
+  return true;
+}
 
 function generateKey() {
   const seg = () => crypto.randomBytes(3).toString("hex").toUpperCase();
   return `LUM-${seg()}-${seg()}-${seg()}`;
 }
 
-export default async function handler(req, res) {
-  res.setHeader("Access-Control-Allow-Origin", "*");
+module.exports = async function handler(req, res) {
+  res.setHeader("Access-Control-Allow-Origin", req.headers.origin || "*");
+  res.setHeader("Access-Control-Allow-Credentials", "true");
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, x-admin-password");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
   if (req.method === "OPTIONS") return res.status(200).end();
 
-  if (req.headers["x-admin-password"] !== ADMIN_PASSWORD)
+  if (!verifySession(req))
     return res.status(401).json({ error: "Unauthorized." });
 
   if (req.method === "GET") {
@@ -34,14 +47,15 @@ export default async function handler(req, res) {
   }
 
   if (req.method === "POST") {
-    const { amount = 1, expiresInDays = null } = req.body;
+    const { amount = 1, expiresInDays } = req.body;
+    const clamped = Math.min(Math.max(parseInt(amount) || 1, 1), 100);
 
-    const keys = Array.from({ length: Math.min(amount, 100) }, () => ({
+    const keys = Array.from({ length: clamped }, () => ({
       key: generateKey(),
       used: false,
       hwid: null,
       used_at: null,
-     expires_at: new Date(Date.now() + ((expiresInDays ?? 1) * 86400000)).toISOString(),
+      expires_at: new Date(Date.now() + ((parseInt(expiresInDays) ?? 1) * 86400000)).toISOString(),
       created_at: new Date().toISOString(),
     }));
 
@@ -53,11 +67,10 @@ export default async function handler(req, res) {
   if (req.method === "DELETE") {
     const { id } = req.body;
     if (!id) return res.status(400).json({ error: "Missing id." });
-
     const { error } = await supabase.from("keys").delete().eq("id", id);
     if (error) return res.status(500).json({ error: error.message });
     return res.json({ success: true });
   }
 
-  return res.status(405).json({ error: "Method not allowed." });
-}
+  return res.status(405).end();
+};
