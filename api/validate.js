@@ -1,9 +1,6 @@
 const { createClient } = require("@supabase/supabase-js");
 
-const supabase = createClient(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_KEY
-);
+const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
 
 const attempts = new Map();
 const MAX = 10;
@@ -21,10 +18,7 @@ module.exports = async function handler(req, res) {
   const now = Date.now();
   const bucket = attempts.get(ip) || { count: 0, since: now };
 
-  if (now - bucket.since > WINDOW) {
-    bucket.count = 0;
-    bucket.since = now;
-  }
+  if (now - bucket.since > WINDOW) { bucket.count = 0; bucket.since = now; }
 
   if (bucket.count >= MAX)
     return res.status(429).json({ valid: false, message: "Too many attempts. Try again later." });
@@ -37,13 +31,12 @@ module.exports = async function handler(req, res) {
   if (!key || !hwid)
     return res.status(400).json({ valid: false, message: "Missing key or hwid." });
 
-  if (!/^LUM-[A-F0-9]{6}-[A-F0-9]{6}-[A-F0-9]{6}$/.test(key.trim().toUpperCase()))
-    return res.json({ valid: false, message: "Invalid key format." });
+  const normalised = key.trim().toUpperCase();
 
   const { data, error } = await supabase
     .from("keys")
     .select("*")
-    .eq("key", key.trim().toUpperCase())
+    .ilike("key", normalised)
     .single();
 
   if (error || !data)
@@ -59,7 +52,7 @@ module.exports = async function handler(req, res) {
     await supabase
       .from("keys")
       .update({ used: true, hwid, used_at: new Date().toISOString() })
-      .eq("key", key.trim().toUpperCase());
+      .eq("id", data.id);
   }
 
   return res.json({ valid: true, message: "Key accepted." });
