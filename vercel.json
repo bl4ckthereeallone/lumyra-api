@@ -4,6 +4,7 @@
     { "source": "/keys", "destination": "/api/keys.js" },
     { "source": "/login", "destination": "/api/login.js" },
     { "source": "/health", "destination": "/api/health.js" },
+    { "source": "/generate-key", "destination": "/api/generate-key.js" }
     { "source": "/", "destination": "/public/index.html" }
   ]
 }
