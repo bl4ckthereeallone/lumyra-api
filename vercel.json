@@ -1,5 +1,6 @@
 {
   "rewrites": [
+    { "source": "/validate", "destination": "/api/validate.js" },
     { "source": "/", "destination": "/public/index.html" }
   ]
 }
