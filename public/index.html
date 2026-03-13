@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Lumyra — Dashboard</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #111111;
+      color: #ebebeb;
+      font-family: 'Segoe UI', sans-serif;
+      min-height: 100vh;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      height: 54px;
+      background: #1b1b1b;
+      border-bottom: 1px solid #202020;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+
+    .logo-icon {
+      width: 26px; height: 26px;
+      background: #5b6bf8;
+      border-radius: 7px;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 13px;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .logo-text {
+      font-weight: 700;
+      font-size: 13px;
+      filter: drop-shadow(0 0 6px #7b6bf8cc);
+    }
+
+    .logo-text span:first-child { color: #c4bfff; }
+    .logo-text span:last-child  { color: #7b6bf8; }
+
+    .status-pill {
+      display: flex; align-items: center; gap: 7px;
+      background: #1f1f1f;
+      border: 1px solid #333;
+      border-radius: 8px;
+      padding: 6px 12px;
+      font-size: 12px;
+      color: #787878;
+    }
+
+    .status-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: #515151;
+      transition: background 0.3s;
+    }
+
+    .status-dot.online  { background: #3dd68c; box-shadow: 0 0 6px #3dd68c88; }
+    .status-dot.offline { background: #ff5f57; }
+
+    .login-screen {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: calc(100vh - 54px);
+    }
+
+    .login-card {
+      background: #1b1b1b;
+      border: 1px solid #333;
+      border-radius: 14px;
+      padding: 32px 28px;
+      width: 340px;
+    }
+
+    .login-card h2 {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .login-card p {
+      font-size: 12px;
+      color: #787878;
+      margin-bottom: 20px;
+    }
+
+    .main { display: none; padding: 28px; max-width: 1000px; margin: 0 auto; }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      background: #1b1b1b;
+      border: 1px solid #272727;
+      border-radius: 12px;
+      padding: 18px 20px;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      color: #515151;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 8px;
+    }
+
+    .stat-value {
+      font-size: 26px;
+      font-weight: 700;
+      color: #ebebeb;
+    }
+
+    .stat-value.green { color: #3dd68c; }
+    .stat-value.red   { color: #ff5f57; }
+    .stat-value.blue  { color: #5b6bf8; }
+
+    .panel {
+      background: #1b1b1b;
+      border: 1px solid #272727;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      border-bottom: 1px solid #202020;
+    }
+
+    .panel-title {
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .panel-actions { display: flex; gap: 8px; align-items: center; }
+
+    input, select {
+      background: #141414;
+      border: 1px solid #333;
+      border-radius: 8px;
+      color: #ebebeb;
+      font-family: inherit;
+      font-size: 12px;
+      padding: 8px 12px;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    input:focus, select:focus { border-color: #5b6bf8; }
+    input::placeholder { color: #515151; }
+
+    input.sm { width: 70px; }
+
+    button {
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 8px 16px;
+      transition: background 0.15s, opacity 0.15s;
+    }
+
+    button:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    .btn-primary { background: #5b6bf8; color: #fff; }
+    .btn-primary:hover:not(:disabled) { background: #6b7bff; }
+
+    .btn-ghost {
+      background: transparent;
+      border: 1px solid #333;
+      color: #787878;
+    }
+    .btn-ghost:hover:not(:disabled) { background: #2a2a2a; color: #ebebeb; }
+
+    .btn-danger { background: #ff5f5722; color: #ff5f57; border: 1px solid #ff5f5744; }
+    .btn-danger:hover:not(:disabled) { background: #ff5f5733; }
+
+    .btn-icon {
+      width: 30px; height: 30px;
+      padding: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px;
+    }
+
+    table { width: 100%; border-collapse: collapse; }
+
+    th {
+      text-align: left;
+      font-size: 11px;
+      font-weight: 600;
+      color: #515151;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 12px 20px;
+      border-bottom: 1px solid #202020;
+    }
+
+    td {
+      padding: 13px 20px;
+      font-size: 12px;
+      border-bottom: 1px solid #1a1a1a;
+      color: #ebebeb;
+    }
+
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #1f1f1f; }
+
+    .key-text {
+      font-family: 'Consolas', monospace;
+      font-size: 12px;
+      color: #c4bfff;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      border-radius: 5px;
+      padding: 3px 8px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .badge-green { background: #3dd68c22; color: #3dd68c; }
+    .badge-red   { background: #ff5f5722; color: #ff5f57; }
+    .badge-gray  { background: #33333366; color: #787878; }
+
+    .badge::before {
+      content: '';
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    .empty {
+      text-align: center;
+      padding: 48px 20px;
+      color: #515151;
+      font-size: 13px;
+    }
+
+    .console-log {
+      font-family: 'Consolas', monospace;
+      font-size: 12px;
+      padding: 16px 20px;
+      max-height: 200px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .log-entry { display: flex; gap: 12px; }
+    .log-time  { color: #515151; flex-shrink: 0; }
+    .log-ok    { color: #3dd68c; }
+    .log-err   { color: #ff5f57; }
+    .log-info  { color: #787878; }
+
+    .copy-btn {
+      background: transparent;
+      border: none;
+      color: #515151;
+      cursor: pointer;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 11px;
+    }
+    .copy-btn:hover { color: #ebebeb; background: #2a2a2a; }
+
+    .toast {
+      position: fixed;
+      bottom: 24px; right: 24px;
+      background: #1f1f1f;
+      border: 1px solid #333;
+      border-radius: 10px;
+      padding: 12px 18px;
+      font-size: 12px;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.2s, transform 0.2s;
+      pointer-events: none;
+      z-index: 999;
+    }
+
+    .toast.show { opacity: 1; transform: translateY(0); }
+    .toast.ok  { border-color: #3dd68c44; color: #3dd68c; }
+    .toast.err { border-color: #ff5f5744; color: #ff5f57; }
+
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #333; border-radius: 2px; }
+  </style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="logo">
+    <div class="logo-icon">L</div>
+    <div class="logo-text">
+      <span>Lum</span><span>yra</span>
+    </div>
+  </div>
+  <div class="status-pill">
+    <div class="status-dot" id="statusDot"></div>
+    <span id="statusText">Checking...</span>
+  </div>
+</div>
+
+<div class="login-screen" id="loginScreen">
+  <div class="login-card">
+    <h2>Dashboard</h2>
+    <p>Enter your admin password to continue.</p>
+    <input type="password" id="passwordInput" placeholder="Admin password" style="width:100%;margin-bottom:10px"/>
+    <button class="btn-primary" style="width:100%" onclick="login()">Sign in</button>
+    <div id="loginError" style="color:#ff5f57;font-size:11px;margin-top:8px;display:none">Wrong password.</div>
+  </div>
+</div>
+
+<div class="main" id="main">
+  <div class="stats">
+    <div class="stat-card">
+      <div class="stat-label">Total Keys</div>
+      <div class="stat-value blue" id="statTotal">—</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Unused</div>
+      <div class="stat-value" id="statUnused">—</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Active</div>
+      <div class="stat-value green" id="statUsed">—</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Expired</div>
+      <div class="stat-value red" id="statExpired">—</div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-header">
+      <div class="panel-title">Generate Keys</div>
+    </div>
+    <div style="padding:16px 20px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+      <input class="sm" type="number" id="genAmount" value="1" min="1" max="100" placeholder="Amount"/>
+      <input class="sm" type="number" id="genDays" placeholder="Days (opt)"/>
+      <button class="btn-primary" onclick="generateKeys()">Generate</button>
+      <span style="color:#515151;font-size:11px">Leave days empty for no expiry</span>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-header">
+      <div class="panel-title">Keys</div>
+      <div class="panel-actions">
+        <input type="text" id="searchInput" placeholder="Search..." style="width:180px" oninput="renderTable()"/>
+        <select id="filterSelect" onchange="renderTable()">
+          <option value="all">All</option>
+          <option value="unused">Unused</option>
+          <option value="used">Used</option>
+          <option value="expired">Expired</option>
+        </select>
+        <button class="btn-ghost" onclick="loadKeys()">↻ Refresh</button>
+      </div>
+    </div>
+    <div id="tableWrap">
+      <div class="empty">No keys yet.</div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-header">
+      <div class="panel-title">Console</div>
+      <button class="btn-ghost btn-icon" onclick="clearLogs()" title="Clear">✕</button>
+    </div>
+    <div class="console-log" id="console"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const API = window.location.origin;
+  let password = "";
+  let allKeys = [];
+
+  async function checkStatus() {
+    try {
+      const r = await fetch(`${API}/health`);
+      const d = await r.json();
+      if (d.status === "ok") {
+        document.getElementById("statusDot").className = "status-dot online";
+        document.getElementById("statusText").textContent = "Online";
+      }
+    } catch {
+      document.getElementById("statusDot").className = "status-dot offline";
+      document.getElementById("statusText").textContent = "Offline";
+    }
+  }
+
+  async function login() {
+    const pw = document.getElementById("passwordInput").value;
+    try {
+      const r = await fetch(`${API}/keys`, {
+        headers: { "x-admin-password": pw }
+      });
+      if (r.status === 401) {
+        document.getElementById("loginError").style.display = "block";
+        return;
+      }
+      password = pw;
+      allKeys = await r.json();
+      document.getElementById("loginScreen").style.display = "none";
+      document.getElementById("main").style.display = "block";
+      updateStats();
+      renderTable();
+      log("Logged in.", "info");
+    } catch {
+      document.getElementById("loginError").style.display = "block";
+    }
+  }
+
+  document.getElementById("passwordInput").addEventListener("keydown", e => {
+    if (e.key === "Enter") login();
+  });
+
+  async function loadKeys() {
+    try {
+      const r = await fetch(`${API}/keys`, { headers: { "x-admin-password": password } });
+      allKeys = await r.json();
+      updateStats();
+      renderTable();
+      log("Keys refreshed.", "info");
+    } catch { log("Failed to load keys.", "err"); }
+  }
+
+  async function generateKeys() {
+    const amount = parseInt(document.getElementById("genAmount").value) || 1;
+    const days = document.getElementById("genDays").value;
+    try {
+      const r = await fetch(`${API}/keys`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-admin-password": password },
+        body: JSON.stringify({ amount, expiresInDays: days ? parseInt(days) : null })
+      });
+      const data = await r.json();
+      log(`Generated ${data.length} key(s).`, "ok");
+      toast(`Generated ${data.length} key(s)`, "ok");
+      await loadKeys();
+    } catch { log("Failed to generate keys.", "err"); }
+  }
+
+  async function deleteKey(id, key) {
+    if (!confirm(`Delete key ${key}?`)) return;
+    try {
+      await fetch(`${API}/keys`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json", "x-admin-password": password },
+        body: JSON.stringify({ id })
+      });
+      log(`Deleted key ${key}.`, "ok");
+      toast("Key deleted", "ok");
+      await loadKeys();
+    } catch { log("Failed to delete key.", "err"); }
+  }
+
+  function updateStats() {
+    const now = new Date();
+    const total   = allKeys.length;
+    const expired = allKeys.filter(k => k.expires_at && new Date(k.expires_at) < now).length;
+    const used    = allKeys.filter(k => k.used).length;
+    const unused  = total - used;
+    document.getElementById("statTotal").textContent   = total;
+    document.getElementById("statUnused").textContent  = unused;
+    document.getElementById("statUsed").textContent    = used;
+    document.getElementById("statExpired").textContent = expired;
+  }
+
+  function renderTable() {
+    const search = document.getElementById("searchInput").value.toLowerCase();
+    const filter = document.getElementById("filterSelect").value;
+    const now = new Date();
+
+    let keys = allKeys.filter(k => {
+      const expired = k.expires_at && new Date(k.expires_at) < now;
+      if (filter === "unused"  && (k.used || expired)) return false;
+      if (filter === "used"    && !k.used) return false;
+      if (filter === "expired" && !expired) return false;
+      if (search && !k.key.toLowerCase().includes(search)) return false;
+      return true;
+    });
+
+    if (!keys.length) {
+      document.getElementById("tableWrap").innerHTML = '<div class="empty">No keys found.</div>';
+      return;
+    }
+
+    const rows = keys.map(k => {
+      const expired = k.expires_at && new Date(k.expires_at) < now;
+      const badge = expired
+        ? `<span class="badge badge-red">Expired</span>`
+        : k.used
+          ? `<span class="badge badge-green">Active</span>`
+          : `<span class="badge badge-gray">Unused</span>`;
+
+      const expiry = k.expires_at
+        ? new Date(k.expires_at).toLocaleDateString()
+        : '<span style="color:#515151">Never</span>';
+
+      const usedAt = k.used_at
+        ? new Date(k.used_at).toLocaleString()
+        : '<span style="color:#515151">—</span>';
+
+      const hwid = k.hwid
+        ? `<span style="font-family:Consolas;font-size:11px;color:#787878">${k.hwid.substring(0,16)}...</span>`
+        : '<span style="color:#515151">—</span>';
+
+      return `<tr>
+        <td>
+          <span class="key-text">${k.key}</span>
+          <button class="copy-btn" onclick="copyKey('${k.key}')">copy</button>
+        </td>
+        <td>${badge}</td>
+        <td>${expiry}</td>
+        <td>${usedAt}</td>
+        <td>${hwid}</td>
+        <td><button class="btn-danger btn-icon" onclick="deleteKey('${k.id}','${k.key}')">✕</button></td>
+      </tr>`;
+    }).join("");
+
+    document.getElementById("tableWrap").innerHTML = `
+      <table>
+        <thead>
+          <tr>
+            <th>Key</th>
+            <th>Status</th>
+            <th>Expires</th>
+            <th>Used At</th>
+            <th>HWID</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>`;
+  }
+
+  function copyKey(key) {
+    navigator.clipboard.writeText(key);
+    toast("Copied!", "ok");
+  }
+
+  function log(msg, type = "info") {
+    const el = document.getElementById("console");
+    const time = new Date().toLocaleTimeString();
+    const entry = document.createElement("div");
+    entry.className = "log-entry";
+    entry.innerHTML = `<span class="log-time">${time}</span><span class="log-${type}">${msg}</span>`;
+    el.appendChild(entry);
+    el.scrollTop = el.scrollHeight;
+  }
+
+  function clearLogs() {
+    document.getElementById("console").innerHTML = "";
+  }
+
+  let toastTimer;
+  function toast(msg, type = "ok") {
+    const el = document.getElementById("toast");
+    el.textContent = msg;
+    el.className = `toast show ${type}`;
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => el.className = "toast", 2500);
+  }
+
+  checkStatus();
+  setInterval(checkStatus, 30000);
+</script>
+</body>
+</html>
