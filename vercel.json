@@ -1,6 +1,9 @@
 {
   "rewrites": [
     { "source": "/validate", "destination": "/api/validate.js" },
+    { "source": "/keys", "destination": "/api/keys.js" },
+    { "source": "/login", "destination": "/api/login.js" },
+    { "source": "/health", "destination": "/api/health.js" },
     { "source": "/", "destination": "/public/index.html" }
   ]
 }
