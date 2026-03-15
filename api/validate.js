@@ -45,8 +45,10 @@ module.exports = async function handler(req, res) {
   if (data.used && data.hwid !== hwid)
     return res.json({ valid: false, message: "Key is locked to another PC." });
 
-  if (data.expires_at && new Date(data.expires_at) < new Date())
+if (data.expires_at && new Date(data.expires_at) < new Date()) {
+    await supabase.from("keys").delete().eq("id", data.id);
     return res.json({ valid: false, message: "Key has expired." });
+}
 
   if (!data.used) {
     await supabase
