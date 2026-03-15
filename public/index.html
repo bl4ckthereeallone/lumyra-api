@@ -758,6 +758,7 @@ const A={
   }
 };
 
+window.A=A;
 document.getElementById('pwI').addEventListener('keydown',e=>{if(e.key==='Enter')A.login();});
 if(tok){A.showDash();}
 setInterval(A.chkSt,30000);
