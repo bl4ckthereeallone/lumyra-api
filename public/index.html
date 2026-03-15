@@ -5,497 +5,497 @@
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Lumyra</title>
 <style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
+
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#0a0a0a;
-  --bg1:#111;
-  --bg2:#161616;
-  --bg3:#1c1c1c;
-  --hover:#1f1f1f;
-  --stroke:#1e1e1e;
-  --stroke2:#2a2a2a;
-  --txt:#e2e2e2;
-  --txt2:#666;
-  --txt3:#333;
-  --accent:#5b6bf8;
-  --accent-h:#6b7bff;
-  --accent-dim:#5b6bf818;
-  --green:#3dd68c;
-  --green-dim:#3dd68c15;
-  --red:#ff5f57;
-  --red-dim:#ff5f5715;
-  --yellow:#f5a623;
-  --yellow-dim:#f5a62315;
-  --purple:#c4bfff;
-  --purple-dark:#7b6bf8;
+  --bg:#090909;
+  --s1:#0f0f0f;
+  --s2:#141414;
+  --s3:#1a1a1a;
+  --s4:#202020;
+  --b1:#2a2a2a;
+  --b2:#333;
+  --t1:#f0f0f0;
+  --t2:#888;
+  --t3:#444;
+  --t4:#2a2a2a;
+  --a:#5966f0;
+  --a2:#6b78ff;
+  --a3:#8b96ff;
+  --adim:#5966f012;
+  --g:#2ecc87;
+  --gdim:#2ecc8712;
+  --r:#f05959;
+  --rdim:#f0595912;
+  --y:#f0b259;
+  --ydim:#f0b25912;
+  --pu:#b8b0ff;
+  --pudim:#b8b0ff10;
 }
-html,body{height:100%;background:var(--bg);color:var(--txt);font-family:'Segoe UI',system-ui,sans-serif;font-size:13px;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-button{font-family:inherit;cursor:pointer;border:none;outline:none}
-input,select,textarea{font-family:inherit;outline:none}
-.page{display:none;min-height:100vh}
-.page.active{display:flex}
+html,body{height:100%;background:var(--bg);color:var(--t1);font-family:'DM Sans',sans-serif;font-size:13px;-webkit-font-smoothing:antialiased;overflow:hidden}
+*:focus{outline:none}
+button,input,select,textarea{font-family:inherit}
+button{cursor:pointer;border:none;background:none}
+input,select,textarea{border:none;background:none;color:var(--t1)}
+input::placeholder,textarea::placeholder{color:var(--t3)}
 
-#loginPage{
+.page{display:none;height:100vh;overflow:hidden}
+.page.on{display:flex}
+
+#lp{
   align-items:center;justify-content:center;
   background:var(--bg);
-  background-image:radial-gradient(ellipse at 20% 50%, #5b6bf808 0%, transparent 60%),
-                   radial-gradient(ellipse at 80% 20%, #7b6bf806 0%, transparent 50%);
+  position:relative;
 }
-.login-wrap{width:380px;display:flex;flex-direction:column;align-items:center}
-.login-logo{display:flex;align-items:center;gap:10px;margin-bottom:10px}
-.logo-icon{width:32px;height:32px;background:var(--accent);border-radius:9px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;color:#fff;flex-shrink:0;box-shadow:0 0 20px #5b6bf830}
-.logo-text{font-weight:700;font-size:16px}
-.logo-text em{color:var(--purple);font-style:normal;filter:drop-shadow(0 0 8px #7b6bf8aa)}
-.logo-text span{color:var(--purple-dark);filter:drop-shadow(0 0 8px #7b6bf8aa)}
-.login-tagline{font-size:11px;color:var(--txt3);margin-bottom:32px;letter-spacing:.02em}
+#lp::before{
+  content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 600px 400px at 15% 60%, #5966f00a 0%, transparent 70%),
+    radial-gradient(ellipse 400px 300px at 85% 20%, #b8b0ff07 0%, transparent 60%);
+  pointer-events:none;
+}
 
-.login-card{background:var(--bg1);border:1px solid var(--stroke2);border-radius:18px;padding:28px;width:100%;box-shadow:0 24px 64px #00000066}
-.login-card-title{font-size:15px;font-weight:700;margin-bottom:4px}
-.login-card-sub{font-size:12px;color:var(--txt2);margin-bottom:24px}
+.lc{width:360px;position:relative;z-index:1}
+.lc-logo{display:flex;align-items:center;gap:11px;margin-bottom:8px}
+.lc-icon{width:34px;height:34px;background:var(--a);border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;color:#fff;flex-shrink:0;box-shadow:0 0 24px #5966f035}
+.lc-name{font-weight:700;font-size:17px;letter-spacing:-.3px}
+.lc-name em{color:var(--pu);font-style:normal;text-shadow:0 0 20px #b8b0ff55}
+.lc-name s{color:#5966f0;text-decoration:none;text-shadow:0 0 20px #5966f055}
+.lc-tag{font-size:11px;color:var(--t3);margin-bottom:36px;letter-spacing:.03em}
 
-.field{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
-.field label{font-size:11px;color:var(--txt2);font-weight:600;letter-spacing:.03em;text-transform:uppercase}
-.field input{background:var(--bg);border:1px solid var(--stroke2);border-radius:10px;color:var(--txt);padding:11px 14px;font-size:13px;transition:border-color .15s,box-shadow .15s}
-.field input:focus{border-color:var(--accent);box-shadow:0 0 0 3px #5b6bf812}
-.field input::placeholder{color:var(--txt3)}
+.lc-card{background:var(--s1);border:1px solid var(--b1);border-radius:20px;padding:28px;box-shadow:0 32px 80px #00000070}
+.lc-card-h{font-size:14px;font-weight:700;letter-spacing:-.2px;margin-bottom:3px}
+.lc-card-s{font-size:11px;color:var(--t2);margin-bottom:22px}
 
-.err-msg{font-size:11px;color:var(--red);min-height:16px;margin-bottom:12px;display:flex;align-items:center;gap:5px}
-.err-msg:not(:empty)::before{content:'';width:4px;height:4px;border-radius:50%;background:var(--red);flex-shrink:0}
+.fi{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
+.fi label{font-size:10px;color:var(--t3);font-weight:600;text-transform:uppercase;letter-spacing:.08em}
+.fi input{background:var(--bg);border:1px solid var(--b1);border-radius:10px;color:var(--t1);padding:11px 14px;font-size:13px;transition:border-color .15s,box-shadow .15s}
+.fi input:focus{border-color:var(--a);box-shadow:0 0 0 3px #5966f010}
 
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;font-size:12px;font-weight:600;padding:10px 18px;transition:all .15s;border:none;border-radius:10px;letter-spacing:.01em}
-.btn:disabled{opacity:.35;cursor:not-allowed}
-.btn-primary{background:var(--accent);color:#fff;box-shadow:0 4px 14px #5b6bf828}
-.btn-primary:hover:not(:disabled){background:var(--accent-h);box-shadow:0 4px 20px #5b6bf840}
-.btn-ghost{background:transparent;border:1px solid var(--stroke2);color:var(--txt2)}
-.btn-ghost:hover:not(:disabled){background:var(--hover);color:var(--txt);border-color:var(--stroke2)}
-.btn-danger{background:var(--red-dim);border:1px solid #ff5f5720;color:var(--red)}
-.btn-danger:hover:not(:disabled){background:#ff5f5722}
-.btn-success{background:var(--green-dim);border:1px solid #3dd68c20;color:var(--green)}
-.btn-success:hover:not(:disabled){background:#3dd68c22}
+.em{font-size:11px;color:var(--r);min-height:16px;margin-bottom:12px;display:flex;align-items:center;gap:5px}
+.em:not(:empty)::before{content:'';width:4px;height:4px;border-radius:50%;background:var(--r);flex-shrink:0}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;font-size:12px;font-weight:600;padding:10px 18px;transition:all .15s;border-radius:10px;letter-spacing:.01em}
+.btn:disabled{opacity:.3;cursor:not-allowed}
+.btnp{background:var(--a);color:#fff;box-shadow:0 4px 16px #5966f030}
+.btnp:hover:not(:disabled){background:var(--a2)}
+.btng{background:transparent;border:1px solid var(--b1);color:var(--t2)}
+.btng:hover:not(:disabled){background:var(--s3);color:var(--t1)}
+.btnr{background:var(--rdim);border:1px solid #f0595920;color:var(--r)}
+.btnr:hover:not(:disabled){background:#f0595920}
+.btns{background:var(--gdim);border:1px solid #2ecc8720;color:var(--g)}
+.btns:hover:not(:disabled){background:#2ecc8720}
 .btn-sm{padding:6px 12px;font-size:11px;border-radius:8px}
-.btn-xs{padding:4px 9px;font-size:10px;border-radius:6px}
-.btn-icon{width:30px;height:30px;padding:0;border-radius:8px;font-size:13px}
-.btn-full{width:100%}
+.btn-xs{padding:4px 9px;font-size:10px;border-radius:7px}
+.btn-ic{width:30px;height:30px;padding:0;border-radius:8px;font-size:12px}
+.btn-fw{width:100%}
 
-.login-footer{margin-top:20px;font-size:11px;color:var(--txt3);text-align:center}
+.lc-foot{margin-top:18px;font-size:10px;color:var(--t4);text-align:center;letter-spacing:.03em}
 
-#dashPage{flex-direction:column;background:var(--bg)}
+#dp{flex-direction:column}
 
-.topbar{height:50px;background:var(--bg1);border-bottom:1px solid var(--stroke);display:flex;align-items:center;justify-content:space-between;padding:0 22px;flex-shrink:0;position:sticky;top:0;z-index:100;backdrop-filter:blur(12px)}
-.topbar-left{display:flex;align-items:center;gap:12px}
-.tb-logo{width:22px;height:22px;background:var(--accent);border-radius:6px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:10px;color:#fff;box-shadow:0 0 10px #5b6bf830}
-.tb-name{font-weight:700;font-size:12px}
-.tb-name em{color:var(--purple);font-style:normal}
-.tb-name span{color:var(--purple-dark)}
-.tb-sep{width:1px;height:14px;background:var(--stroke2)}
-.tb-page{color:var(--txt2);font-size:11px;font-weight:500}
-.topbar-right{display:flex;align-items:center;gap:8px}
-.status-pill{display:flex;align-items:center;gap:6px;background:var(--bg2);border:1px solid var(--stroke);border-radius:8px;padding:5px 10px;font-size:11px;color:var(--txt2)}
-.sdot{width:5px;height:5px;border-radius:50%;background:var(--txt3);transition:all .3s;flex-shrink:0}
-.sdot.on{background:var(--green);box-shadow:0 0 6px var(--green)}
-.sdot.off{background:var(--red)}
+.tb{height:50px;background:var(--s1);border-bottom:1px solid var(--b1);display:flex;align-items:center;justify-content:space-between;padding:0 20px;flex-shrink:0;position:sticky;top:0;z-index:100}
+.tb-l{display:flex;align-items:center;gap:10px}
+.tb-ic{width:22px;height:22px;background:var(--a);border-radius:7px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:10px;color:#fff;box-shadow:0 0 12px #5966f030;flex-shrink:0}
+.tb-nm{font-weight:700;font-size:12px;letter-spacing:-.2px}
+.tb-nm em{color:var(--pu);font-style:normal}
+.tb-nm s{color:#5966f0;text-decoration:none}
+.tb-div{width:1px;height:13px;background:var(--b1)}
+.tb-pg{color:var(--t3);font-size:11px;font-weight:500}
+.tb-r{display:flex;align-items:center;gap:8px}
+.sp{display:flex;align-items:center;gap:6px;background:var(--s2);border:1px solid var(--b1);border-radius:8px;padding:5px 10px;font-size:11px;color:var(--t3)}
+.sd{width:5px;height:5px;border-radius:50%;background:var(--t4);transition:all .3s;flex-shrink:0}
+.sd.on{background:var(--g);box-shadow:0 0 6px var(--g)}
+.sd.off{background:var(--r)}
 
-.layout{display:flex;flex:1;min-height:0}
-.sidebar{width:200px;flex-shrink:0;background:var(--bg1);border-right:1px solid var(--stroke);display:flex;flex-direction:column;padding:16px 10px;gap:2px}
-.nav-item{display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:9px;cursor:pointer;transition:background .12s,color .12s;color:var(--txt2);font-size:12px;font-weight:500;user-select:none}
-.nav-item:hover{background:var(--hover);color:var(--txt)}
-.nav-item.active{background:var(--accent-dim);color:var(--accent);border:1px solid #5b6bf818}
-.nav-icon{font-size:14px;width:18px;text-align:center;flex-shrink:0}
-.nav-sep{height:1px;background:var(--stroke);margin:8px 4px}
-.nav-label{font-size:10px;color:var(--txt3);font-weight:600;text-transform:uppercase;letter-spacing:.05em;padding:4px 12px 2px}
+.wr{display:flex;flex:1;min-height:0;overflow:hidden}
 
-.main{flex:1;overflow-y:auto;padding:22px}
-.section{display:none}
-.section.active{display:block}
+.sb{width:210px;flex-shrink:0;background:var(--s1);border-right:1px solid var(--b1);display:flex;flex-direction:column;padding:12px 8px;gap:1px;overflow-y:auto}
+.nb{font-size:10px;color:var(--t4);font-weight:700;text-transform:uppercase;letter-spacing:.08em;padding:8px 10px 4px}
+.ni{display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:10px;cursor:pointer;transition:all .12s;color:var(--t3);font-size:12px;font-weight:500;user-select:none;border:1px solid transparent}
+.ni:hover{background:var(--s3);color:var(--t2)}
+.ni.on{background:var(--adim);color:var(--a);border-color:#5966f015;font-weight:600}
+.ni-ic{font-size:13px;width:20px;text-align:center;flex-shrink:0;opacity:.8}
+.ni.on .ni-ic{opacity:1}
+.nsep{height:1px;background:var(--b1);margin:6px 4px}
 
-.page-header{margin-bottom:20px}
-.page-title{font-size:16px;font-weight:700;margin-bottom:3px}
-.page-sub{font-size:12px;color:var(--txt2)}
+.mn{flex:1;overflow-y:auto;padding:24px;background:var(--bg)}
+.sc{display:none}
+.sc.on{display:block}
 
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px}
-.stat{background:var(--bg1);border:1px solid var(--stroke);border-radius:14px;padding:16px 18px;position:relative;overflow:hidden}
-.stat::after{content:'';position:absolute;top:0;right:0;width:60px;height:60px;border-radius:0 14px 0 60px;opacity:.06}
-.stat.accent::after{background:var(--accent)}
-.stat.green::after{background:var(--green)}
-.stat.red::after{background:var(--red)}
-.stat.yellow::after{background:var(--yellow)}
-.stat-label{font-size:10px;color:var(--txt2);font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px}
-.stat-val{font-size:26px;font-weight:800;line-height:1}
-.stat-sub{font-size:10px;color:var(--txt3);margin-top:6px}
-.stat.accent .stat-val{color:var(--accent)}
-.stat.green .stat-val{color:var(--green)}
-.stat.red .stat-val{color:var(--red)}
-.stat.yellow .stat-val{color:var(--yellow)}
+.ph{margin-bottom:22px}
+.pt{font-size:18px;font-weight:700;letter-spacing:-.4px;margin-bottom:3px}
+.ps{font-size:12px;color:var(--t2)}
 
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.gs{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+.gc2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.gc3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px}
 
-.card{background:var(--bg1);border:1px solid var(--stroke);border-radius:14px;overflow:hidden;margin-bottom:12px}
-.card-header{display:flex;align-items:center;justify-content:space-between;padding:13px 18px;border-bottom:1px solid var(--stroke)}
-.card-title{font-size:12px;font-weight:700;display:flex;align-items:center;gap:7px}
-.card-title-icon{font-size:13px;opacity:.7}
-.card-actions{display:flex;align-items:center;gap:7px}
-.card-body{padding:16px 18px}
+.st{background:var(--s1);border:1px solid var(--b1);border-radius:14px;padding:16px 18px;position:relative;overflow:hidden;transition:border-color .2s}
+.st:hover{border-color:var(--b2)}
+.st-lb{font-size:10px;color:var(--t3);font-weight:600;text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px}
+.st-v{font-size:26px;font-weight:800;letter-spacing:-.5px;line-height:1}
+.st-s{font-size:10px;color:var(--t3);margin-top:6px}
+.st-a .st-v{color:var(--a)}
+.st-g .st-v{color:var(--g)}
+.st-r .st-v{color:var(--r)}
+.st-y .st-v{color:var(--y)}
+.st-accent{border-color:#5966f020}
+.st-green{border-color:#2ecc8720}
+.st-red{border-color:#f0595920}
+.st-yellow{border-color:#f0b25920}
 
-.input-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.inp{background:var(--bg);border:1px solid var(--stroke2);border-radius:8px;color:var(--txt);padding:8px 12px;font-size:12px;transition:border-color .15s}
-.inp:focus{border-color:var(--accent)}
-.inp::placeholder{color:var(--txt3)}
+.cd{background:var(--s1);border:1px solid var(--b1);border-radius:14px;overflow:hidden;margin-bottom:12px;transition:border-color .2s}
+.cd:hover{border-color:var(--b2)}
+.ch{display:flex;align-items:center;justify-content:space-between;padding:13px 18px;border-bottom:1px solid var(--b1)}
+.ct{font-size:12px;font-weight:700;letter-spacing:-.1px;display:flex;align-items:center;gap:7px}
+.ca{display:flex;align-items:center;gap:7px}
+.cb{padding:16px 18px}
+
+.inp{background:var(--bg);border:1px solid var(--b1);border-radius:9px;color:var(--t1);padding:9px 12px;font-size:12px;transition:border-color .15s,box-shadow .15s;display:block}
+.inp:focus{border-color:var(--a);box-shadow:0 0 0 3px #5966f00c}
 .inp-sm{width:80px}
-.inp-md{width:140px}
-.inp-full{width:100%}
-.hint{font-size:11px;color:var(--txt3)}
+.inp-md{width:150px}
+.inp-fw{width:100%}
 
-.divider{height:1px;background:var(--stroke);margin:14px 0}
+.ir{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.ht{font-size:11px;color:var(--t3);line-height:1.4}
+
+.dv{height:1px;background:var(--b1);margin:14px 0}
 
 table{width:100%;border-collapse:collapse}
-th{text-align:left;font-size:10px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.07em;padding:10px 16px;border-bottom:1px solid var(--stroke)}
+th{text-align:left;font-size:10px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.08em;padding:10px 16px;border-bottom:1px solid var(--b1)}
 td{padding:11px 16px;border-bottom:1px solid #111;vertical-align:middle;font-size:12px}
 tr:last-child td{border-bottom:none}
-tr:hover td{background:#0f0f0f}
+tr{transition:background .1s}
+tr:hover td{background:#0d0d0d}
 
-.key-mono{font-family:'Consolas','Courier New',monospace;color:var(--purple);font-size:11px;letter-spacing:.03em}
-.copy-btn{background:none;border:none;color:var(--txt3);font-size:10px;padding:2px 7px;border-radius:5px;cursor:pointer;transition:all .12s;margin-left:3px}
-.copy-btn:hover{color:var(--txt);background:var(--bg3)}
+.km{font-family:'DM Mono',monospace;color:var(--pu);font-size:11px;letter-spacing:.02em}
+.cpb{background:none;border:none;color:var(--t4);font-size:10px;padding:2px 7px;border-radius:5px;cursor:pointer;transition:all .12s;margin-left:3px}
+.cpb:hover{color:var(--t1);background:var(--s3)}
 
-.badge{display:inline-flex;align-items:center;gap:4px;border-radius:6px;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:.02em}
-.badge::before{content:'';width:4px;height:4px;border-radius:50%;background:currentColor;flex-shrink:0}
-.badge-green{background:var(--green-dim);color:var(--green)}
-.badge-red{background:var(--red-dim);color:var(--red)}
-.badge-gray{background:#2a2a2a;color:var(--txt3)}
-.badge-yellow{background:var(--yellow-dim);color:var(--yellow)}
-.badge-blue{background:var(--accent-dim);color:var(--accent)}
+.bg{display:inline-flex;align-items:center;gap:4px;border-radius:6px;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:.02em}
+.bg::before{content:'';width:4px;height:4px;border-radius:50%;background:currentColor;flex-shrink:0}
+.bg-g{background:var(--gdim);color:var(--g)}
+.bg-r{background:var(--rdim);color:var(--r)}
+.bg-n{background:var(--s3);color:var(--t3)}
+.bg-y{background:var(--ydim);color:var(--y)}
+.bg-a{background:var(--adim);color:var(--a)}
 
-.empty{text-align:center;padding:48px 20px;color:var(--txt3);font-size:12px}
-.empty-icon{font-size:28px;margin-bottom:8px;opacity:.3}
+.emp{text-align:center;padding:48px 20px;color:var(--t3);font-size:12px}
+.emp-ic{font-size:30px;margin-bottom:10px;opacity:.2}
 
-.dim{color:var(--txt3)}
-.mono-sm{font-family:'Consolas',monospace;font-size:10px;color:var(--txt2)}
+.dm{color:var(--t3)}
+.msm{font-family:'DM Mono',monospace;font-size:10px;color:var(--t2)}
 
-.console-wrap{max-height:200px;overflow-y:auto;padding:12px 16px;display:flex;flex-direction:column;gap:3px;background:var(--bg);border-top:1px solid var(--stroke)}
-.log-line{display:flex;gap:10px;font-family:'Consolas',monospace;font-size:11px;line-height:1.5}
-.log-ts{color:var(--txt3);flex-shrink:0;min-width:72px}
-.log-ok{color:var(--green)}
-.log-err{color:var(--red)}
-.log-info{color:var(--txt2)}
-.log-warn{color:var(--yellow)}
+.cw{overflow-y:auto;padding:12px 16px;display:flex;flex-direction:column;gap:3px;background:var(--bg)}
+.ll{display:flex;gap:10px;font-family:'DM Mono',monospace;font-size:11px;line-height:1.6}
+.lt{color:var(--t4);flex-shrink:0;min-width:75px}
+.lok{color:var(--g)}
+.ler{color:var(--r)}
+.lin{color:var(--t3)}
+.lwa{color:var(--y)}
 
-.activity-item{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid var(--stroke)}
-.activity-item:last-child{border-bottom:none}
-.activity-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:3px}
-.activity-dot.ok{background:var(--green)}
-.activity-dot.err{background:var(--red)}
-.activity-dot.info{background:var(--accent)}
-.activity-content{flex:1;min-width:0}
-.activity-msg{font-size:12px;color:var(--txt)}
-.activity-time{font-size:10px;color:var(--txt3);margin-top:2px}
+.ai{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--b1)}
+.ai:last-child{border-bottom:none}
+.ad{width:6px;height:6px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.ad.ok{background:var(--g)}
+.ad.err{background:var(--r)}
+.ad.inf{background:var(--a)}
+.aw{flex:1;min-width:0}
+.am{font-size:12px;color:var(--t1)}
+.at{font-size:10px;color:var(--t3);margin-top:2px}
 
-.settings-row{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--stroke)}
-.settings-row:last-child{border-bottom:none}
-.settings-info{}
-.settings-label{font-size:12px;font-weight:600;margin-bottom:2px}
-.settings-desc{font-size:11px;color:var(--txt2)}
+.sr{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--b1)}
+.sr:last-child{border-bottom:none}
+.sl{font-size:12px;font-weight:600;margin-bottom:3px;letter-spacing:-.1px}
+.sd2{font-size:11px;color:var(--t2);line-height:1.4}
 
-.toggle{position:relative;width:36px;height:20px;flex-shrink:0}
-.toggle input{opacity:0;width:0;height:0;position:absolute}
-.toggle-track{position:absolute;inset:0;background:var(--bg3);border:1px solid var(--stroke2);border-radius:10px;transition:all .2s;cursor:pointer}
-.toggle input:checked + .toggle-track{background:var(--accent);border-color:var(--accent)}
-.toggle-track::after{content:'';position:absolute;left:3px;top:50%;transform:translateY(-50%);width:12px;height:12px;background:#fff;border-radius:50%;transition:left .2s;box-shadow:0 1px 3px #00000044}
-.toggle input:checked + .toggle-track::after{left:19px}
+.tg{position:relative;width:38px;height:21px;flex-shrink:0}
+.tg input{opacity:0;width:0;height:0;position:absolute}
+.tgt{position:absolute;inset:0;background:var(--s4);border:1px solid var(--b1);border-radius:11px;transition:all .2s;cursor:pointer}
+.tg input:checked + .tgt{background:var(--a);border-color:var(--a)}
+.tgt::after{content:'';position:absolute;left:3px;top:50%;transform:translateY(-50%);width:13px;height:13px;background:#fff;border-radius:50%;transition:left .2s;box-shadow:0 1px 4px #00000055}
+.tg input:checked + .tgt::after{left:20px}
 
-.progress-bar{height:4px;background:var(--bg3);border-radius:2px;overflow:hidden;margin-top:8px}
-.progress-fill{height:100%;border-radius:2px;transition:width .3s}
-.progress-fill.green{background:var(--green)}
-.progress-fill.yellow{background:var(--yellow)}
-.progress-fill.red{background:var(--red)}
+.mr{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--b1)}
+.mr:last-child{border-bottom:none}
+.ml{font-size:11px;color:var(--t2)}
+.mv{font-size:12px;font-weight:600}
 
-.metric-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--stroke)}
-.metric-row:last-child{border-bottom:none}
-.metric-label{font-size:11px;color:var(--txt2)}
-.metric-val{font-size:12px;font-weight:600}
+.pb{height:3px;background:var(--s4);border-radius:2px;overflow:hidden;margin-top:6px}
+.pf{height:100%;border-radius:2px;transition:width .4s}
+.pg{background:var(--g)}
+.py{background:var(--y)}
+.pr{background:var(--r)}
 
-.search-wrap{position:relative}
-.search-wrap input{padding-left:30px}
-.search-icon{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--txt3);font-size:12px;pointer-events:none}
+.kv-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:14px}
+.kv{background:var(--bg);border:1px solid var(--b1);border-radius:10px;padding:12px 14px}
+.kv-l{font-size:10px;color:var(--t3);font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+.kv-v{font-size:13px;font-weight:700}
 
-.tag{display:inline-flex;align-items:center;gap:4px;background:var(--bg3);border:1px solid var(--stroke2);border-radius:5px;padding:2px 7px;font-size:10px;color:var(--txt2)}
+.search-wr{position:relative;display:inline-block}
+.search-ic{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--t3);font-size:11px;pointer-events:none}
+.search-wr input{padding-left:28px}
 
-.toast{position:fixed;bottom:18px;right:18px;background:var(--bg2);border:1px solid var(--stroke2);border-radius:12px;padding:10px 15px;font-size:12px;opacity:0;transform:translateY(8px);transition:opacity .2s,transform .2s;pointer-events:none;z-index:9999;max-width:240px;box-shadow:0 8px 24px #00000055}
+.toast{position:fixed;bottom:18px;right:18px;background:var(--s2);border:1px solid var(--b2);border-radius:12px;padding:10px 15px;font-size:12px;opacity:0;transform:translateY(8px);transition:opacity .2s,transform .2s;pointer-events:none;z-index:9999;box-shadow:0 8px 28px #00000060;max-width:220px}
 .toast.show{opacity:1;transform:translateY(0)}
-.toast.ok{border-color:#3dd68c25;color:var(--green)}
-.toast.err{border-color:#ff5f5725;color:var(--red)}
-.toast.info{border-color:#5b6bf825;color:var(--accent)}
+.toast.ok{border-color:#2ecc8725;color:var(--g)}
+.toast.err{border-color:#f0595925;color:var(--r)}
+.toast.inf{border-color:#5966f025;color:var(--a)}
 
-::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar{width:3px;height:3px}
 ::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:var(--stroke2);border-radius:2px}
-::-webkit-scrollbar-thumb:hover{background:#444}
+::-webkit-scrollbar-thumb{background:var(--b1);border-radius:2px}
+::-webkit-scrollbar-thumb:hover{background:var(--b2)}
 </style>
 </head>
 <body>
 
-<div class="page active" id="loginPage">
-  <div class="login-wrap">
-    <div class="login-logo">
-      <div class="logo-icon">L</div>
-      <div class="logo-text"><em>Lum</em><span>yra</span></div>
+<div class="page on" id="lp">
+  <div class="lc">
+    <div class="lc-logo">
+      <div class="lc-icon">L</div>
+      <div class="lc-name"><em>Lum</em><s>yra</s></div>
     </div>
-    <div class="login-tagline">Key Management System</div>
-    <div class="login-card">
-      <div class="login-card-title">Sign in</div>
-      <div class="login-card-sub">Enter your admin password to access the dashboard.</div>
-      <div class="field">
+    <div class="lc-tag">Key Management System — Restricted</div>
+    <div class="lc-card">
+      <div class="lc-card-h">Admin Access</div>
+      <div class="lc-card-s">Enter your password to continue.</div>
+      <div class="fi">
         <label>Password</label>
-        <input type="password" id="pwInput" placeholder="••••••••••••" autocomplete="current-password"/>
+        <input type="password" id="pwI" placeholder="••••••••••••" autocomplete="current-password"/>
       </div>
-      <div class="err-msg" id="loginErr"></div>
-      <button class="btn btn-primary btn-full" id="loginBtn" onclick="_login()">Continue</button>
+      <div class="em" id="lErr"></div>
+      <button class="btn btnp btn-fw" id="lBtn" onclick="A.login()">Continue →</button>
     </div>
-    <div class="login-footer">Lumyra v1.0 — Restricted Access</div>
+    <div class="lc-foot">LUMYRA v1.0 · AUTHORIZED ACCESS ONLY</div>
   </div>
 </div>
 
-<div class="page" id="dashPage">
-  <div class="topbar">
-    <div class="topbar-left">
-      <div class="tb-logo">L</div>
-      <div class="tb-name"><em>Lum</em><span>yra</span></div>
-      <div class="tb-sep"></div>
-      <div class="tb-page" id="tbPage">Overview</div>
+<div class="page" id="dp">
+  <div class="tb">
+    <div class="tb-l">
+      <div class="tb-ic">L</div>
+      <div class="tb-nm"><em>Lum</em><s>yra</s></div>
+      <div class="tb-div"></div>
+      <div class="tb-pg" id="tbPg">Overview</div>
     </div>
-    <div class="topbar-right">
-      <div class="status-pill">
-        <div class="sdot" id="sDot"></div>
+    <div class="tb-r">
+      <div class="sp">
+        <div class="sd" id="sDot"></div>
         <span id="sTxt">Checking</span>
       </div>
-      <button class="btn btn-ghost btn-sm" onclick="_logout()">Sign out</button>
+      <button class="btn btng btn-sm" onclick="A.logout()">Sign out</button>
     </div>
   </div>
 
-  <div class="layout">
-    <div class="sidebar">
-      <div class="nav-label">Main</div>
-      <div class="nav-item active" onclick="nav('overview',this)" data-page="overview">
-        <span class="nav-icon">⬡</span> Overview
-      </div>
-      <div class="nav-item" onclick="nav('keys',this)" data-page="keys">
-        <span class="nav-icon">⬡</span> Keys
-      </div>
-      <div class="nav-item" onclick="nav('generate',this)" data-page="generate">
-        <span class="nav-icon">⬡</span> Generate
-      </div>
-      <div class="nav-sep"></div>
-      <div class="nav-label">System</div>
-      <div class="nav-item" onclick="nav('activity',this)" data-page="activity">
-        <span class="nav-icon">⬡</span> Activity
-      </div>
-      <div class="nav-item" onclick="nav('settings',this)" data-page="settings">
-        <span class="nav-icon">⬡</span> Settings
-      </div>
+  <div class="wr">
+    <div class="sb">
+      <div class="nb">Main</div>
+      <div class="ni on" data-pg="ov" onclick="A.nav(this)"><span class="ni-ic">○</span>Overview</div>
+      <div class="ni" data-pg="ky" onclick="A.nav(this)"><span class="ni-ic">○</span>Keys</div>
+      <div class="ni" data-pg="gn" onclick="A.nav(this)"><span class="ni-ic">○</span>Generate</div>
+      <div class="nsep"></div>
+      <div class="nb">System</div>
+      <div class="ni" data-pg="ac" onclick="A.nav(this)"><span class="ni-ic">○</span>Activity</div>
+      <div class="ni" data-pg="st" onclick="A.nav(this)"><span class="ni-ic">○</span>Settings</div>
     </div>
 
-    <div class="main">
+    <div class="mn">
 
-      <div class="section active" id="sec-overview">
-        <div class="page-header">
-          <div class="page-title">Overview</div>
-          <div class="page-sub">Your key system at a glance.</div>
-        </div>
-        <div class="stats">
-          <div class="stat accent">
-            <div class="stat-label">Total Keys</div>
-            <div class="stat-val" id="sTotal">—</div>
-            <div class="stat-sub">All time</div>
+      <div class="sc on" id="sc-ov">
+        <div class="ph"><div class="pt">Overview</div><div class="ps">Your key system at a glance.</div></div>
+        <div class="gs">
+          <div class="st st-a st-accent">
+            <div class="st-lb">Total Keys</div>
+            <div class="st-v" id="sTotal">—</div>
+            <div class="st-s">All time</div>
           </div>
-          <div class="stat green">
-            <div class="stat-label">Active</div>
-            <div class="stat-val" id="sUsed">—</div>
-            <div class="stat-sub">In use</div>
+          <div class="st st-g st-green">
+            <div class="st-lb">Active</div>
+            <div class="st-v" id="sUsed">—</div>
+            <div class="st-s">In use now</div>
           </div>
-          <div class="stat">
-            <div class="stat-label">Unused</div>
-            <div class="stat-val" id="sUnused">—</div>
-            <div class="stat-sub">Available</div>
+          <div class="st">
+            <div class="st-lb">Unused</div>
+            <div class="st-v" id="sUnused">—</div>
+            <div class="st-s">Available</div>
           </div>
-          <div class="stat red">
-            <div class="stat-label">Expired</div>
-            <div class="stat-val" id="sExpired">—</div>
-            <div class="stat-sub">Needs cleanup</div>
+          <div class="st st-r st-red">
+            <div class="st-lb">Expired</div>
+            <div class="st-v" id="sExpired">—</div>
+            <div class="st-s">Needs cleanup</div>
           </div>
         </div>
-        <div class="grid2">
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title">Key Health</div>
-            </div>
-            <div class="card-body">
-              <div class="metric-row">
-                <div class="metric-label">Usage rate</div>
-                <div class="metric-val" id="mUsageRate">—</div>
-              </div>
-              <div class="metric-row">
-                <div class="metric-label">Expiry rate</div>
-                <div class="metric-val" id="mExpiryRate">—</div>
-              </div>
-              <div class="metric-row">
-                <div class="metric-label">Expiring in 1h</div>
-                <div class="metric-val" id="mExpiring1h">—</div>
-              </div>
-              <div class="metric-row">
-                <div class="metric-label">Expiring in 6h</div>
-                <div class="metric-val" id="mExpiring6h">—</div>
-              </div>
+
+        <div class="gc2">
+          <div class="cd">
+            <div class="ch"><div class="ct">Key Health</div></div>
+            <div class="cb">
+              <div class="mr"><div class="ml">Usage rate</div><div class="mv" id="mUr">—</div></div>
+              <div class="mr"><div class="ml">Expiry rate</div><div class="mv" id="mEr">—</div></div>
+              <div class="mr"><div class="ml">Expiring &lt; 1h</div><div class="mv" id="mE1">—</div></div>
+              <div class="mr"><div class="ml">Expiring &lt; 6h</div><div class="mv" id="mE6">—</div></div>
+              <div class="mr"><div class="ml">HWID locked</div><div class="mv" id="mHw">—</div></div>
             </div>
           </div>
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title">Recent Activity</div>
-              <button class="btn btn-ghost btn-xs" onclick="nav('activity',document.querySelector('[data-page=activity]'))">View all</button>
+          <div class="cd">
+            <div class="ch">
+              <div class="ct">Recent Activity</div>
+              <button class="btn btng btn-xs" onclick="A.nav(document.querySelector('[data-pg=ac]'))">All →</button>
             </div>
-            <div class="card-body" id="recentActivity">
-              <div class="empty"><div class="empty-icon">◎</div>No activity yet.</div>
-            </div>
+            <div class="cb" id="ovAct"><div class="emp"><div class="emp-ic">◎</div>No activity yet.</div></div>
           </div>
         </div>
-        <div class="card">
-          <div class="card-header">
-            <div class="card-title">Quick Actions</div>
-          </div>
-          <div class="card-body">
-            <div class="input-row">
-              <button class="btn btn-primary btn-sm" onclick="quickGen(1)">+ Generate 1 Key</button>
-              <button class="btn btn-primary btn-sm" onclick="quickGen(5)">+ Generate 5 Keys</button>
-              <button class="btn btn-primary btn-sm" onclick="quickGen(10)">+ Generate 10 Keys</button>
-              <button class="btn btn-danger btn-sm" onclick="deleteExpired()">✕ Delete Expired</button>
-              <button class="btn btn-ghost btn-sm" onclick="loadKeys()">↻ Refresh</button>
+
+        <div class="cd">
+          <div class="ch"><div class="ct">Key Distribution</div></div>
+          <div class="cb">
+            <div style="display:flex;gap:24px;flex-wrap:wrap">
+              <div style="flex:1;min-width:120px">
+                <div style="font-size:10px;color:var(--t3);margin-bottom:6px;font-weight:600;text-transform:uppercase;letter-spacing:.06em">Active vs Total</div>
+                <div class="pb"><div class="pf pg" id="pbUsed" style="width:0%"></div></div>
+                <div style="font-size:10px;color:var(--t3);margin-top:4px" id="pbUsedLb">0 of 0</div>
+              </div>
+              <div style="flex:1;min-width:120px">
+                <div style="font-size:10px;color:var(--t3);margin-bottom:6px;font-weight:600;text-transform:uppercase;letter-spacing:.06em">Expired vs Total</div>
+                <div class="pb"><div class="pf pr" id="pbExp" style="width:0%"></div></div>
+                <div style="font-size:10px;color:var(--t3);margin-top:4px" id="pbExpLb">0 of 0</div>
+              </div>
+              <div style="flex:1;min-width:120px">
+                <div style="font-size:10px;color:var(--t3);margin-bottom:6px;font-weight:600;text-transform:uppercase;letter-spacing:.06em">Unused vs Total</div>
+                <div class="pb"><div class="pf py" id="pbUnu" style="width:0%"></div></div>
+                <div style="font-size:10px;color:var(--t3);margin-top:4px" id="pbUnuLb">0 of 0</div>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="section" id="sec-keys">
-        <div class="page-header">
-          <div class="page-title">Keys</div>
-          <div class="page-sub">Manage all license keys.</div>
-        </div>
-        <div class="card">
-          <div class="card-header">
-            <div class="card-title">All Keys</div>
-            <div class="card-actions">
-              <div class="search-wrap">
-                <span class="search-icon">⌕</span>
-                <input class="inp" type="text" id="searchIn" placeholder="Search..." oninput="renderTable()" style="padding-left:28px;width:180px"/>
+      <div class="sc" id="sc-ky">
+        <div class="ph"><div class="pt">Keys</div><div class="ps">View and manage all license keys.</div></div>
+        <div class="cd">
+          <div class="ch">
+            <div class="ct">All Keys <span style="color:var(--t3);font-weight:400" id="keyCount"></span></div>
+            <div class="ca">
+              <div class="search-wr">
+                <span class="search-ic">⌕</span>
+                <input class="inp" type="text" id="srchIn" placeholder="Search..." oninput="A.tbl()" style="width:170px;padding-left:28px"/>
               </div>
-              <select class="inp" id="filterSel" onchange="renderTable()" style="width:110px">
-                <option value="all">All</option>
+              <select class="inp" id="fltSel" onchange="A.tbl()" style="width:110px">
+                <option value="all">All keys</option>
                 <option value="unused">Unused</option>
                 <option value="used">Active</option>
                 <option value="expired">Expired</option>
               </select>
-              <button class="btn btn-ghost btn-sm" onclick="loadKeys()">↻</button>
-              <button class="btn btn-danger btn-sm" onclick="deleteAllKeys()">Delete all</button>
+              <button class="btn btng btn-sm" onclick="A.load()">↻ Refresh</button>
+              <button class="btn btnr btn-sm" onclick="A.delAll()">Delete all</button>
             </div>
           </div>
-          <div id="tableWrap"><div class="empty"><div class="empty-icon">◎</div>No keys yet.</div></div>
+          <div id="tblWr"><div class="emp"><div class="emp-ic">◎</div>No keys yet.</div></div>
         </div>
       </div>
 
-      <div class="section" id="sec-generate">
-        <div class="page-header">
-          <div class="page-title">Generate Keys</div>
-          <div class="page-sub">Create new license keys.</div>
-        </div>
-        <div class="grid2">
-          <div class="card">
-            <div class="card-header"><div class="card-title">New Keys</div></div>
-            <div class="card-body">
-              <div class="field">
-                <label>Amount</label>
-                <input class="inp inp-full" type="number" id="genAmt" value="1" min="1" max="100" placeholder="1–100"/>
+      <div class="sc" id="sc-gn">
+        <div class="ph"><div class="pt">Generate</div><div class="ps">Create new license keys.</div></div>
+        <div class="gc2">
+          <div class="cd">
+            <div class="ch"><div class="ct">New Keys</div></div>
+            <div class="cb">
+              <div class="fi" style="margin-bottom:10px">
+                <label>Amount <span style="color:var(--t3)">(max 100)</span></label>
+                <input class="inp inp-fw" type="number" id="gnAmt" value="1" min="1" max="100"/>
               </div>
-              <div class="field">
-                <label>Expiry (days)</label>
-                <input class="inp inp-full" type="number" id="genDays" placeholder="Leave empty for 24h"/>
+              <div class="fi" style="margin-bottom:16px">
+                <label>Expiry in days <span style="color:var(--t3)">(empty = 24h)</span></label>
+                <input class="inp inp-fw" type="number" id="gnDays" placeholder="1"/>
               </div>
-              <div style="margin-top:4px">
-                <button class="btn btn-primary btn-full" onclick="generateKeys()">Generate Keys</button>
-              </div>
+              <button class="btn btnp btn-fw" onclick="A.gen()">Generate Keys</button>
             </div>
           </div>
-          <div class="card">
-            <div class="card-header"><div class="card-title">Bulk Delete</div></div>
-            <div class="card-body">
-              <div class="field">
-                <label>Amount</label>
-                <input class="inp inp-full" type="number" id="delAmt" placeholder="Number of keys"/>
+          <div class="cd">
+            <div class="ch"><div class="ct">Bulk Delete</div></div>
+            <div class="cb">
+              <div class="fi" style="margin-bottom:10px">
+                <label>Amount to delete</label>
+                <input class="inp inp-fw" type="number" id="dlAmt" placeholder="e.g. 5"/>
               </div>
-              <div class="hint" style="margin-bottom:14px">Deletes oldest keys first.</div>
-              <div class="input-row">
-                <button class="btn btn-danger" style="flex:1" onclick="deleteSomeKeys()">Delete Amount</button>
-                <button class="btn btn-danger" style="flex:1" onclick="deleteExpired()">Delete Expired</button>
+              <div class="ht" style="margin-bottom:16px">Deletes oldest keys first. Expired keys are removed automatically on validation.</div>
+              <div class="ir">
+                <button class="btn btnr" style="flex:1" onclick="A.delSome()">Delete Amount</button>
+                <button class="btn btnr" style="flex:1" onclick="A.delExp()">Delete Expired</button>
               </div>
             </div>
           </div>
         </div>
-        <div class="card">
-          <div class="card-header"><div class="card-title">Generated Output</div><button class="btn btn-ghost btn-xs" onclick="clearOutput()">Clear</button></div>
-          <div class="console-wrap" id="genOutput" style="max-height:240px"><div style="color:var(--txt3);font-size:11px;font-family:Consolas">Generated keys will appear here...</div></div>
+        <div class="cd">
+          <div class="ch">
+            <div class="ct">Output</div>
+            <button class="btn btng btn-xs" onclick="A.clrOut()">Clear</button>
+          </div>
+          <div class="cw" id="gnOut" style="max-height:260px;min-height:80px">
+            <div class="ll"><span class="lt" style="color:var(--t4)">ready</span><span class="lin">Generated keys will appear here.</span></div>
+          </div>
         </div>
       </div>
 
-      <div class="section" id="sec-activity">
-        <div class="page-header">
-          <div class="page-title">Activity Log</div>
-          <div class="page-sub">All dashboard actions.</div>
-        </div>
-        <div class="card">
-          <div class="card-header">
-            <div class="card-title">Log</div>
-            <button class="btn btn-ghost btn-sm" onclick="clearLog()">Clear</button>
+      <div class="sc" id="sc-ac">
+        <div class="ph"><div class="pt">Activity</div><div class="ps">All dashboard actions this session.</div></div>
+        <div class="cd">
+          <div class="ch">
+            <div class="ct">Log</div>
+            <button class="btn btng btn-sm" onclick="A.clrLog()">Clear</button>
           </div>
-          <div class="console-wrap" id="console" style="max-height:500px"></div>
+          <div class="cw" id="conEl" style="max-height:calc(100vh - 260px);min-height:200px"></div>
         </div>
       </div>
 
-      <div class="section" id="sec-settings">
-        <div class="page-header">
-          <div class="page-title">Settings</div>
-          <div class="page-sub">Dashboard preferences.</div>
-        </div>
-        <div class="card">
-          <div class="card-header"><div class="card-title">Display</div></div>
-          <div class="card-body">
-            <div class="settings-row">
-              <div class="settings-info">
-                <div class="settings-label">Auto-refresh keys</div>
-                <div class="settings-desc">Automatically reload the keys list every 30 seconds.</div>
+      <div class="sc" id="sc-st">
+        <div class="ph"><div class="pt">Settings</div><div class="ps">Customize your dashboard experience.</div></div>
+        <div class="gc2">
+          <div class="cd">
+            <div class="ch"><div class="ct">Display</div></div>
+            <div class="cb">
+              <div class="sr">
+                <div><div class="sl">Auto-refresh</div><div class="sd2">Reload keys every 30 seconds automatically.</div></div>
+                <label class="tg"><input type="checkbox" id="sAR" onchange="A.sv('autoRefresh',this.checked)"/><div class="tgt"></div></label>
               </div>
-              <label class="toggle"><input type="checkbox" id="settingAutoRefresh" checked onchange="saveSetting('autoRefresh',this.checked)"/><div class="toggle-track"></div></label>
+              <div class="sr">
+                <div><div class="sl">Show HWID column</div><div class="sd2">Display hardware ID in the keys table.</div></div>
+                <label class="tg"><input type="checkbox" id="sHW" onchange="A.sv('showHwid',this.checked);A.tbl()"/><div class="tgt"></div></label>
+              </div>
+              <div class="sr">
+                <div><div class="sl">Show used-at column</div><div class="sd2">Display when the key was first activated.</div></div>
+                <label class="tg"><input type="checkbox" id="sUA" onchange="A.sv('showUsedAt',this.checked);A.tbl()"/><div class="tgt"></div></label>
+              </div>
             </div>
-            <div class="settings-row">
-              <div class="settings-info">
-                <div class="settings-label">Show HWID in table</div>
-                <div class="settings-desc">Display the HWID column in the keys table.</div>
+          </div>
+          <div class="cd">
+            <div class="ch"><div class="ct">Behaviour</div></div>
+            <div class="cb">
+              <div class="sr">
+                <div><div class="sl">Confirm before delete</div><div class="sd2">Show a dialog before deleting any key.</div></div>
+                <label class="tg"><input type="checkbox" id="sCF" onchange="A.sv('confirmDel',this.checked)"/><div class="tgt"></div></label>
               </div>
-              <label class="toggle"><input type="checkbox" id="settingShowHwid" checked onchange="saveSetting('showHwid',this.checked);renderTable()"/><div class="toggle-track"></div></label>
-            </div>
-            <div class="settings-row">
-              <div class="settings-info">
-                <div class="settings-label">Confirm before delete</div>
-                <div class="settings-desc">Show a confirmation dialog before deleting keys.</div>
+              <div class="sr">
+                <div><div class="sl">Copy on row click</div><div class="sd2">Click any key row to copy the key.</div></div>
+                <label class="tg"><input type="checkbox" id="sRC" onchange="A.sv('rowCopy',this.checked)"/><div class="tgt"></div></label>
               </div>
-              <label class="toggle"><input type="checkbox" id="settingConfirmDelete" checked onchange="saveSetting('confirmDelete',this.checked)"/><div class="toggle-track"></div></label>
+              <div class="sr">
+                <div><div class="sl">Dense table</div><div class="sd2">Reduce row padding for more visible keys.</div></div>
+                <label class="tg"><input type="checkbox" id="sDT" onchange="A.sv('dense',this.checked);A.tbl()"/><div class="tgt"></div></label>
+              </div>
             </div>
           </div>
         </div>
-        <div class="card">
-          <div class="card-header"><div class="card-title">Session</div></div>
-          <div class="card-body">
-            <div class="settings-row">
-              <div class="settings-info">
-                <div class="settings-label">Sign out</div>
-                <div class="settings-desc">End your current session and return to login.</div>
-              </div>
-              <button class="btn btn-danger btn-sm" onclick="_logout()">Sign out</button>
+        <div class="cd">
+          <div class="ch"><div class="ct">Session</div></div>
+          <div class="cb">
+            <div class="sr">
+              <div><div class="sl">Sign out</div><div class="sd2">End your current session and return to login.</div></div>
+              <button class="btn btnr btn-sm" onclick="A.logout()">Sign out</button>
             </div>
           </div>
         </div>
@@ -508,375 +508,259 @@ tr:hover td{background:#0f0f0f}
 <div class="toast" id="toast"></div>
 
 <script>
-(function() {
+(function(){
+const API=window.location.origin;
+let tok=localStorage.getItem('_lx')||'';
+let keys=[];
+let act=[];
+let rT,toT;
+let cfg=JSON.parse(localStorage.getItem('_lcfg')||'{"autoRefresh":true,"showHwid":true,"showUsedAt":true,"confirmDel":true,"rowCopy":false,"dense":false}');
 
-const API = window.location.origin;
-let _token = localStorage.getItem("_lx") || "";
-let _keys = [];
-let _toastT;
-let _refreshT;
-let _activity = [];
-let _settings = JSON.parse(localStorage.getItem("_ls") || '{"autoRefresh":true,"showHwid":true,"confirmDelete":true}');
-
-function saveSetting(k, v) {
-  _settings[k] = v;
-  localStorage.setItem("_ls", JSON.stringify(_settings));
-}
-
-function applySettings() {
-  document.getElementById("settingAutoRefresh").checked  = _settings.autoRefresh  !== false;
-  document.getElementById("settingShowHwid").checked     = _settings.showHwid     !== false;
-  document.getElementById("settingConfirmDelete").checked = _settings.confirmDelete !== false;
-}
-
-function nav(page, el) {
-  document.querySelectorAll(".nav-item").forEach(n => n.classList.remove("active"));
-  el.classList.add("active");
-  document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
-  document.getElementById("sec-" + page).classList.add("active");
-  document.getElementById("tbPage").textContent =
-    el.textContent.trim();
-}
-
-async function _login() {
-  const pw = document.getElementById("pwInput").value;
-  const btn = document.getElementById("loginBtn");
-  const err = document.getElementById("loginErr");
-  if (!pw) { err.textContent = "Enter your password."; return; }
-  btn.disabled = true;
-  btn.textContent = "Signing in...";
-  err.textContent = "";
-  try {
-    const r = await fetch(`${API}/api/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ password: pw })
-    });
-    const d = await r.json();
-    if (!r.ok) {
-      err.textContent = d.error || "Wrong password.";
-      btn.disabled = false;
-      btn.textContent = "Continue";
-      return;
+const A={
+  login:async function(){
+    const pw=document.getElementById('pwI').value;
+    const btn=document.getElementById('lBtn');
+    const err=document.getElementById('lErr');
+    if(!pw){err.textContent='Enter your password.';return;}
+    btn.disabled=true;btn.textContent='Signing in...';err.textContent='';
+    try{
+      const r=await fetch(API+'/api/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:pw})});
+      const d=await r.json();
+      if(!r.ok){err.textContent=d.error||'Wrong password.';btn.disabled=false;btn.textContent='Continue →';return;}
+      tok=d.token;localStorage.setItem('_lx',tok);
+      document.getElementById('pwI').value='';
+      A.showDash();
+    }catch{err.textContent='Could not connect.';btn.disabled=false;btn.textContent='Continue →';}
+  },
+  showDash:function(){
+    document.getElementById('lp').classList.remove('on');
+    document.getElementById('dp').classList.add('on');
+    A.applyCfg();A.load();A.chkSt();A.startRT();
+    A.log('Session started.','inf');
+  },
+  logout:function(){
+    tok='';localStorage.removeItem('_lx');keys=[];act=[];
+    clearInterval(rT);
+    document.getElementById('dp').classList.remove('on');
+    document.getElementById('lp').classList.add('on');
+    document.getElementById('lBtn').disabled=false;
+    document.getElementById('lBtn').textContent='Continue →';
+  },
+  nav:function(el){
+    document.querySelectorAll('.ni').forEach(n=>n.classList.remove('on'));
+    el.classList.add('on');
+    const pg=el.dataset.pg;
+    document.querySelectorAll('.sc').forEach(s=>s.classList.remove('on'));
+    document.getElementById('sc-'+pg).classList.add('on');
+    document.getElementById('tbPg').textContent=el.textContent.trim();
+  },
+  sv:function(k,v){cfg[k]=v;localStorage.setItem('_lcfg',JSON.stringify(cfg));},
+  applyCfg:function(){
+    document.getElementById('sAR').checked=cfg.autoRefresh!==false;
+    document.getElementById('sHW').checked=cfg.showHwid!==false;
+    document.getElementById('sUA').checked=cfg.showUsedAt!==false;
+    document.getElementById('sCF').checked=cfg.confirmDel!==false;
+    document.getElementById('sRC').checked=!!cfg.rowCopy;
+    document.getElementById('sDT').checked=!!cfg.dense;
+  },
+  startRT:function(){
+    clearInterval(rT);
+    rT=setInterval(()=>{if(cfg.autoRefresh!==false)A.load();},30000);
+  },
+  req:async function(url,opts={}){
+    const r=await fetch(url,{...opts,headers:{...(opts.headers||{}),'Authorization':'Bearer '+tok}});
+    if(r.status===401){A.logout();return null;}
+    return r;
+  },
+  load:async function(){
+    try{
+      const r=await A.req(API+'/api/keys');
+      if(!r)return;
+      keys=await r.json();
+      A.stats();A.tbl();A.ovStats();
+    }catch{A.log('Failed to load keys.','err');}
+  },
+  gen:async function(){
+    const amt=Math.min(parseInt(document.getElementById('gnAmt').value)||1,100);
+    const days=document.getElementById('gnDays').value;
+    try{
+      const r=await A.req(API+'/api/keys',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({amount:amt,expiresInDays:days?parseInt(days):null})});
+      if(!r)return;
+      const data=await r.json();
+      A.log('Generated '+data.length+' key(s).','ok');
+      A.toast('Generated '+data.length+' key(s)','ok');
+      A.addAct('Generated '+data.length+' key(s)','ok');
+      const out=document.getElementById('gnOut');out.innerHTML='';
+      data.forEach(k=>{
+        const d=document.createElement('div');d.className='ll';
+        d.innerHTML='<span class="lt lok">NEW</span><span class="km">'+k.key+'</span><button class="cpb" onclick="A.cp(\''+k.key+'\')">copy</button>';
+        out.appendChild(d);
+      });
+      out.scrollTop=out.scrollHeight;
+      await A.load();
+    }catch{A.log('Failed to generate.','err');}
+  },
+  delKey:async function(id,key){
+    if(cfg.confirmDel!==false&&!confirm('Delete '+key+'?'))return;
+    try{
+      const r=await A.req(API+'/api/keys',{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({id})});
+      if(!r)return;
+      A.log('Deleted '+key+'.','ok');A.toast('Deleted','ok');
+      A.addAct('Deleted key '+key.substring(0,14)+'…','err');
+      await A.load();
+    }catch{A.log('Failed.','err');}
+  },
+  delAll:async function(){
+    if(!confirm('Delete ALL '+keys.length+' keys? This cannot be undone.'))return;
+    try{
+      const r=await A.req(API+'/api/keys',{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({deleteAll:true})});
+      if(!r)return;
+      const d=await r.json();
+      A.log('Deleted all ('+d.deleted+').','ok');A.toast('Deleted '+d.deleted,'ok');
+      A.addAct('Deleted all keys ('+d.deleted+')','err');
+      await A.load();
+    }catch{A.log('Failed.','err');}
+  },
+  delSome:async function(){
+    const amt=parseInt(document.getElementById('dlAmt').value);
+    if(!amt||amt<1){A.toast('Enter a valid amount','err');return;}
+    if(cfg.confirmDel!==false&&!confirm('Delete '+amt+' key(s)?'))return;
+    try{
+      const r=await A.req(API+'/api/keys',{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({deleteAmount:amt})});
+      if(!r)return;
+      const d=await r.json();
+      A.log('Deleted '+d.deleted+' key(s).','ok');A.toast('Deleted '+d.deleted,'ok');
+      await A.load();
+    }catch{A.log('Failed.','err');}
+  },
+  delExp:async function(){
+    const exp=keys.filter(k=>k.expires_at&&new Date(k.expires_at)<new Date());
+    if(!exp.length){A.toast('No expired keys','inf');return;}
+    if(cfg.confirmDel!==false&&!confirm('Delete '+exp.length+' expired key(s)?'))return;
+    let del=0;
+    for(const k of exp){
+      const r=await A.req(API+'/api/keys',{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:k.id})});
+      if(r)del++;
     }
-    _token = d.token;
-    localStorage.setItem("_lx", _token);
-    document.getElementById("pwInput").value = "";
-    _showDash();
-  } catch {
-    err.textContent = "Could not connect.";
-    btn.disabled = false;
-    btn.textContent = "Continue";
+    A.log('Deleted '+del+' expired.','ok');A.toast('Deleted '+del+' expired','ok');
+    await A.load();
+  },
+  stats:function(){
+    const now=new Date();
+    const exp=keys.filter(k=>k.expires_at&&new Date(k.expires_at)<now).length;
+    const used=keys.filter(k=>k.used).length;
+    document.getElementById('sTotal').textContent=keys.length;
+    document.getElementById('sUnused').textContent=keys.length-used;
+    document.getElementById('sUsed').textContent=used;
+    document.getElementById('sExpired').textContent=exp;
+  },
+  ovStats:function(){
+    const now=new Date();
+    const total=keys.length;
+    const used=keys.filter(k=>k.used).length;
+    const exp=keys.filter(k=>k.expires_at&&new Date(k.expires_at)<now).length;
+    const unu=total-used;
+    const e1=keys.filter(k=>k.expires_at&&new Date(k.expires_at)>now&&(new Date(k.expires_at)-now)<3600000).length;
+    const e6=keys.filter(k=>k.expires_at&&new Date(k.expires_at)>now&&(new Date(k.expires_at)-now)<21600000).length;
+    const hw=keys.filter(k=>k.hwid).length;
+    document.getElementById('mUr').textContent=total?Math.round(used/total*100)+'%':'—';
+    document.getElementById('mEr').textContent=total?Math.round(exp/total*100)+'%':'—';
+    document.getElementById('mE1').textContent=e1;
+    document.getElementById('mE6').textContent=e6;
+    document.getElementById('mHw').textContent=hw;
+    const up=pct=>Math.round(pct*100)+'%';
+    const ur=total?used/total:0;
+    const er=total?exp/total:0;
+    const unr=total?unu/total:0;
+    document.getElementById('pbUsed').style.width=up(ur);
+    document.getElementById('pbExp').style.width=up(er);
+    document.getElementById('pbUnu').style.width=up(unr);
+    document.getElementById('pbUsedLb').textContent=used+' of '+total;
+    document.getElementById('pbExpLb').textContent=exp+' of '+total;
+    document.getElementById('pbUnuLb').textContent=unu+' of '+total;
+    A.renderAct();
+  },
+  addAct:function(msg,type){
+    act.unshift({msg,type,time:new Date()});
+    if(act.length>50)act.pop();
+    A.renderAct();
+  },
+  renderAct:function(){
+    const el=document.getElementById('ovAct');
+    if(!act.length){el.innerHTML='<div class="emp"><div class="emp-ic">◎</div>No activity yet.</div>';return;}
+    el.innerHTML=act.slice(0,6).map(a=>`<div class="ai"><div class="ad ${a.type}"></div><div class="aw"><div class="am">${a.msg}</div><div class="at">${a.time.toLocaleTimeString()}</div></div></div>`).join('');
+  },
+  tbl:function(){
+    const srch=document.getElementById('srchIn').value.toLowerCase();
+    const flt=document.getElementById('fltSel').value;
+    const shHw=cfg.showHwid!==false;
+    const shUa=cfg.showUsedAt!==false;
+    const dense=!!cfg.dense;
+    const now=new Date();
+    const filtered=keys.filter(k=>{
+      const ex=k.expires_at&&new Date(k.expires_at)<now;
+      if(flt==='unused'&&(k.used||ex))return false;
+      if(flt==='used'&&!k.used)return false;
+      if(flt==='expired'&&!ex)return false;
+      if(srch&&!k.key.toLowerCase().includes(srch))return false;
+      return true;
+    });
+    document.getElementById('keyCount').textContent='('+filtered.length+')';
+    if(!filtered.length){document.getElementById('tblWr').innerHTML='<div class="emp"><div class="emp-ic">◎</div>No keys found.</div>';return;}
+    const tdp=dense?'7px 14px':'11px 16px';
+    const rows=filtered.map(k=>{
+      const ex=k.expires_at&&new Date(k.expires_at)<now;
+      const diff=k.expires_at?new Date(k.expires_at)-now:null;
+      const badge=ex?'<span class="bg bg-r">Expired</span>':k.used?'<span class="bg bg-g">Active</span>':'<span class="bg bg-n">Unused</span>';
+      const exp=k.expires_at
+        ?(diff>0&&diff<3600000?'<span class="bg bg-r">'+Math.floor(diff/60000)+'m left</span>'
+        :diff>0&&diff<21600000?'<span class="bg bg-y">'+Math.floor(diff/3600000)+'h left</span>'
+        :'<span class="'+(ex?'dm':'')+'">'+new Date(k.expires_at).toLocaleDateString()+'</span>')
+        :'<span class="dm">Never</span>';
+      const ua=shUa?(k.used_at?'<span style="font-size:11px">'+new Date(k.used_at).toLocaleString()+'</span>':'<span class="dm">—</span>'):'';
+      const hw=shHw?(k.hwid?'<span class="msm">'+k.hwid.substring(0,12)+'…</span>':'<span class="dm">—</span>'):'';
+      const rc=cfg.rowCopy?'style="cursor:pointer" onclick="A.cp(\''+k.key+'\')"':'';
+      return `<tr ${rc}>
+        <td style="padding:${tdp}"><span class="km">${k.key}</span><button class="cpb" onclick="event.stopPropagation();A.cp('${k.key}')">copy</button></td>
+        <td style="padding:${tdp}">${badge}</td>
+        <td style="padding:${tdp}">${exp}</td>
+        ${shUa?`<td style="padding:${tdp}">${ua}</td>`:''}
+        ${shHw?`<td style="padding:${tdp}">${hw}</td>`:''}
+        <td style="padding:${tdp}"><button class="btn btnr btn-ic" onclick="event.stopPropagation();A.delKey('${k.id}','${k.key}')">✕</button></td>
+      </tr>`;
+    }).join('');
+    document.getElementById('tblWr').innerHTML=`<table><thead><tr><th>Key</th><th>Status</th><th>Expires</th>${shUa?'<th>Used At</th>':''}${shHw?'<th>HWID</th>':''}<th></th></tr></thead><tbody>${rows}</tbody></table>`;
+  },
+  cp:function(key){navigator.clipboard.writeText(key);A.toast('Copied','ok');},
+  clrOut:function(){document.getElementById('gnOut').innerHTML='<div class="ll"><span class="lt" style="color:var(--t4)">ready</span><span class="lin">Generated keys will appear here.</span></div>';},
+  log:function(msg,type='inf'){
+    const el=document.getElementById('conEl');
+    const t=new Date().toLocaleTimeString();
+    const d=document.createElement('div');d.className='ll';
+    d.innerHTML='<span class="lt">'+t+'</span><span class="l'+type+'">'+msg+'</span>';
+    el.appendChild(d);el.scrollTop=el.scrollHeight;
+    A.addAct(msg,type);
+  },
+  clrLog:function(){document.getElementById('conEl').innerHTML='';act=[];A.renderAct();},
+  toast:function(msg,type='ok'){
+    const el=document.getElementById('toast');
+    el.textContent=msg;el.className='toast show '+type;
+    clearTimeout(toT);toT=setTimeout(()=>el.className='toast',2200);
+  },
+  clrOut:function(){document.getElementById('gnOut').innerHTML='<div class="ll"><span class="lt" style="color:var(--t4)">ready</span><span class="lin">Generated keys will appear here.</span></div>';},
+  chkSt:async function(){
+    try{
+      const r=await fetch(API+'/api/health');
+      const d=await r.json();
+      if(d.status==='ok'){document.getElementById('sDot').className='sd on';document.getElementById('sTxt').textContent='Online';return;}
+    }catch{}
+    document.getElementById('sDot').className='sd off';document.getElementById('sTxt').textContent='Offline';
   }
-}
+};
 
-function _showDash() {
-  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
-  document.getElementById("dashPage").classList.add("active");
-  applySettings();
-  loadKeys();
-  _checkStatus();
-  _startRefresh();
-  log("Session started.", "info");
-}
-
-function _logout() {
-  _token = "";
-  localStorage.removeItem("_lx");
-  _keys = [];
-  clearInterval(_refreshT);
-  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
-  document.getElementById("loginPage").classList.add("active");
-  document.getElementById("loginBtn").disabled = false;
-  document.getElementById("loginBtn").textContent = "Continue";
-}
-
-function _startRefresh() {
-  clearInterval(_refreshT);
-  _refreshT = setInterval(() => {
-    if (_settings.autoRefresh !== false) loadKeys();
-  }, 30000);
-}
-
-document.getElementById("pwInput").addEventListener("keydown", e => {
-  if (e.key === "Enter") _login();
-});
-
-async function _authed(url, opts = {}) {
-  const r = await fetch(url, {
-    ...opts,
-    headers: { ...(opts.headers || {}), "Authorization": `Bearer ${_token}` }
-  });
-  if (r.status === 401) { _logout(); return null; }
-  return r;
-}
-
-async function loadKeys() {
-  try {
-    const r = await _authed(`${API}/api/keys`);
-    if (!r) return;
-    _keys = await r.json();
-    updateStats();
-    renderTable();
-    updateOverview();
-  } catch { log("Failed to load keys.", "err"); }
-}
-
-async function generateKeys() {
-  const amount = Math.min(parseInt(document.getElementById("genAmt").value) || 1, 100);
-  const days = document.getElementById("genDays").value;
-  try {
-    const r = await _authed(`${API}/api/keys`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ amount, expiresInDays: days ? parseInt(days) : null })
-    });
-    if (!r) return;
-    const data = await r.json();
-    log(`Generated ${data.length} key(s).`, "ok");
-    toast(`Generated ${data.length} key(s)`, "ok");
-    addActivity(`Generated ${data.length} key(s)`, "ok");
-    const out = document.getElementById("genOutput");
-    out.innerHTML = "";
-    data.forEach(k => {
-      const d = document.createElement("div");
-      d.className = "log-line";
-      d.innerHTML = `<span class="log-ts" style="color:var(--green)">NEW</span><span style="color:var(--purple);font-family:Consolas">${k.key}</span><button class="copy-btn" onclick="copyKey('${k.key}')">copy</button>`;
-      out.appendChild(d);
-    });
-    await loadKeys();
-  } catch { log("Failed to generate keys.", "err"); }
-}
-
-async function quickGen(n) {
-  document.getElementById("genAmt").value = n;
-  await generateKeys();
-}
-
-async function deleteKey(id, key) {
-  if (_settings.confirmDelete !== false && !confirm(`Delete ${key}?`)) return;
-  try {
-    const r = await _authed(`${API}/api/keys`, {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id })
-    });
-    if (!r) return;
-    log(`Deleted ${key}.`, "ok");
-    toast("Deleted", "ok");
-    addActivity(`Deleted key ${key.substring(0,14)}…`, "err");
-    await loadKeys();
-  } catch { log("Failed to delete.", "err"); }
-}
-
-async function deleteAllKeys() {
-  if (!confirm(`Delete ALL ${_keys.length} keys? This cannot be undone.`)) return;
-  try {
-    const r = await _authed(`${API}/api/keys`, {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ deleteAll: true })
-    });
-    if (!r) return;
-    const data = await r.json();
-    log(`Deleted all keys (${data.deleted}).`, "ok");
-    toast(`Deleted ${data.deleted} keys`, "ok");
-    addActivity(`Deleted all keys (${data.deleted})`, "err");
-    await loadKeys();
-  } catch { log("Failed.", "err"); }
-}
-
-async function deleteSomeKeys() {
-  const amt = parseInt(document.getElementById("delAmt").value);
-  if (!amt || amt < 1) { toast("Enter a valid amount", "err"); return; }
-  if (_settings.confirmDelete !== false && !confirm(`Delete ${amt} key(s)?`)) return;
-  try {
-    const r = await _authed(`${API}/api/keys`, {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ deleteAmount: amt })
-    });
-    if (!r) return;
-    const data = await r.json();
-    log(`Deleted ${data.deleted} key(s).`, "ok");
-    toast(`Deleted ${data.deleted} key(s)`, "ok");
-    await loadKeys();
-  } catch { log("Failed.", "err"); }
-}
-
-async function deleteExpired() {
-  const expired = _keys.filter(k => k.expires_at && new Date(k.expires_at) < new Date());
-  if (!expired.length) { toast("No expired keys", "info"); return; }
-  if (_settings.confirmDelete !== false && !confirm(`Delete ${expired.length} expired key(s)?`)) return;
-  let deleted = 0;
-  for (const k of expired) {
-    const r = await _authed(`${API}/api/keys`, {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id: k.id })
-    });
-    if (r) deleted++;
-  }
-  log(`Deleted ${deleted} expired key(s).`, "ok");
-  toast(`Deleted ${deleted} expired`, "ok");
-  await loadKeys();
-}
-
-function updateStats() {
-  const now = new Date();
-  const expired = _keys.filter(k => k.expires_at && new Date(k.expires_at) < now).length;
-  const used = _keys.filter(k => k.used).length;
-  document.getElementById("sTotal").textContent   = _keys.length;
-  document.getElementById("sUnused").textContent  = _keys.length - used;
-  document.getElementById("sUsed").textContent    = used;
-  document.getElementById("sExpired").textContent = expired;
-}
-
-function updateOverview() {
-  const now = new Date();
-  const total = _keys.length;
-  const used = _keys.filter(k => k.used).length;
-  const expired = _keys.filter(k => k.expires_at && new Date(k.expires_at) < now).length;
-  const exp1h = _keys.filter(k => k.expires_at && new Date(k.expires_at) > now && (new Date(k.expires_at) - now) < 3600000).length;
-  const exp6h = _keys.filter(k => k.expires_at && new Date(k.expires_at) > now && (new Date(k.expires_at) - now) < 21600000).length;
-
-  document.getElementById("mUsageRate").textContent   = total ? Math.round(used / total * 100) + "%" : "—";
-  document.getElementById("mExpiryRate").textContent  = total ? Math.round(expired / total * 100) + "%" : "—";
-  document.getElementById("mExpiring1h").textContent  = exp1h;
-  document.getElementById("mExpiring6h").textContent  = exp6h;
-}
-
-function addActivity(msg, type) {
-  _activity.unshift({ msg, type, time: new Date() });
-  if (_activity.length > 20) _activity.pop();
-  renderActivity();
-}
-
-function renderActivity() {
-  const el = document.getElementById("recentActivity");
-  if (!_activity.length) {
-    el.innerHTML = '<div class="empty"><div class="empty-icon">◎</div>No activity yet.</div>';
-    return;
-  }
-  el.innerHTML = _activity.slice(0, 5).map(a =>
-    `<div class="activity-item">
-      <div class="activity-dot ${a.type}"></div>
-      <div class="activity-content">
-        <div class="activity-msg">${a.msg}</div>
-        <div class="activity-time">${a.time.toLocaleTimeString()}</div>
-      </div>
-    </div>`
-  ).join("");
-}
-
-function renderTable() {
-  const search = document.getElementById("searchIn").value.toLowerCase();
-  const filter = document.getElementById("filterSel").value;
-  const showHwid = _settings.showHwid !== false;
-  const now = new Date();
-
-  const keys = _keys.filter(k => {
-    const exp = k.expires_at && new Date(k.expires_at) < now;
-    if (filter === "unused"  && (k.used || exp)) return false;
-    if (filter === "used"    && !k.used) return false;
-    if (filter === "expired" && !exp) return false;
-    if (search && !k.key.toLowerCase().includes(search)) return false;
-    return true;
-  });
-
-  if (!keys.length) {
-    document.getElementById("tableWrap").innerHTML = '<div class="empty"><div class="empty-icon">◎</div>No keys found.</div>';
-    return;
-  }
-
-  const rows = keys.map(k => {
-    const exp = k.expires_at && new Date(k.expires_at) < now;
-    const badge = exp
-      ? `<span class="badge badge-red">Expired</span>`
-      : k.used
-        ? `<span class="badge badge-green">Active</span>`
-        : `<span class="badge badge-gray">Unused</span>`;
-
-    const diff = k.expires_at ? new Date(k.expires_at) - now : null;
-    const expiry = k.expires_at
-      ? diff > 0 && diff < 3600000
-        ? `<span class="badge badge-red">${Math.floor(diff/60000)}m left</span>`
-        : diff > 0 && diff < 21600000
-          ? `<span class="badge badge-yellow">${Math.floor(diff/3600000)}h left</span>`
-          : `<span class="${exp ? 'dim' : ''}">${new Date(k.expires_at).toLocaleDateString()}</span>`
-      : '<span class="dim">Never</span>';
-
-    const usedAt = k.used_at ? new Date(k.used_at).toLocaleString() : '<span class="dim">—</span>';
-    const hwid = showHwid
-      ? (k.hwid ? `<span class="mono-sm">${k.hwid.substring(0,14)}…</span>` : '<span class="dim">—</span>')
-      : '';
-
-    return `<tr>
-      <td><span class="key-mono">${k.key}</span><button class="copy-btn" onclick="copyKey('${k.key}')">copy</button></td>
-      <td>${badge}</td>
-      <td>${expiry}</td>
-      <td>${usedAt}</td>
-      ${showHwid ? `<td>${hwid}</td>` : ''}
-      <td><button class="btn btn-danger btn-icon" onclick="deleteKey('${k.id}','${k.key}')">✕</button></td>
-    </tr>`;
-  }).join("");
-
-  const hwidTh = showHwid ? '<th>HWID</th>' : '';
-  document.getElementById("tableWrap").innerHTML = `
-    <table>
-      <thead><tr><th>Key</th><th>Status</th><th>Expires</th><th>Used At</th>${hwidTh}<th></th></tr></thead>
-      <tbody>${rows}</tbody>
-    </table>`;
-}
-
-function copyKey(key) {
-  navigator.clipboard.writeText(key);
-  toast("Copied", "ok");
-}
-
-function clearOutput() {
-  document.getElementById("genOutput").innerHTML = '<div style="color:var(--txt3);font-size:11px;font-family:Consolas">Generated keys will appear here...</div>';
-}
-
-function log(msg, type = "info") {
-  const el = document.getElementById("console");
-  const t = new Date().toLocaleTimeString();
-  const d = document.createElement("div");
-  d.className = "log-line";
-  d.innerHTML = `<span class="log-ts">${t}</span><span class="log-${type}">${msg}</span>`;
-  el.appendChild(d);
-  el.scrollTop = el.scrollHeight;
-}
-
-function clearLog() {
-  document.getElementById("console").innerHTML = "";
-}
-
-function toast(msg, type = "ok") {
-  const el = document.getElementById("toast");
-  el.textContent = msg;
-  el.className = `toast show ${type}`;
-  clearTimeout(_toastT);
-  _toastT = setTimeout(() => el.className = "toast", 2200);
-}
-
-async function _checkStatus() {
-  try {
-    const r = await fetch(`${API}/api/health`);
-    const d = await r.json();
-    if (d.status === "ok") {
-      document.getElementById("sDot").className = "sdot on";
-      document.getElementById("sTxt").textContent = "Online";
-      return;
-    }
-  } catch {}
-  document.getElementById("sDot").className = "sdot off";
-  document.getElementById("sTxt").textContent = "Offline";
-}
-
-if (_token) _showDash();
-setInterval(_checkStatus, 30000);
-
+document.getElementById('pwI').addEventListener('keydown',e=>{if(e.key==='Enter')A.login();});
+if(tok){A.showDash();}
+setInterval(A.chkSt,30000);
 })();
 </script>
 </body>
