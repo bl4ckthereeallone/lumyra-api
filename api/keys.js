@@ -37,7 +37,8 @@ module.exports = async function handler(req, res) {
   if (!(await verifySession(req)))
     return res.status(401).json({ error: "Unauthorized." });
 
-  if (req.method === "GET") {
+if (req.method === "GET") {
+    await supabase.from("keys").delete().lt("expires_at", new Date().toISOString());
     const { data, error } = await supabase
       .from("keys")
       .select("*")
