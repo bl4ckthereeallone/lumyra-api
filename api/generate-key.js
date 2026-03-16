@@ -22,8 +22,19 @@ module.exports = async function handler(req, res) {
   bucket.count++;
   requests.set(ip, bucket);
 
-  const seg = () => crypto.randomBytes(3).toString("hex").toUpperCase();
-  const key = `LUM-${seg()}-${seg()}-${seg()}`;
+const ip = req.headers["x-forwarded-for"]?.split(",")[0]?.trim() || 
+           req.headers["x-real-ip"] || "unknown";
+const now = Date.now();
+const bucket = requests.get(ip) || { count: 0, since: now };
+if (now - bucket.since > WINDOW) { bucket.count = 0; bucket.since = now; }
+if (bucket.count >= MAX) {
+  return res.status(429).json({ 
+    error: "One key per IP per day. Try again tomorrow.",
+    retryAfter: Math.ceil((WINDOW - (now - bucket.since)) / 1000)
+  });
+}
+bucket.count++;
+requests.set(ip, bucket);
   const expires_at = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
 
   const { error } = await supabase.from("keys").insert({
