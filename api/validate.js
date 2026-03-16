@@ -57,5 +57,5 @@ if (data.expires_at && new Date(data.expires_at) < new Date()) {
       .eq("id", data.id);
   }
 
-  return res.json({ valid: true, message: "Key accepted." });
+  return res.json({ valid: true, message: "Key accepted.", expiresAt: data.expires_at });
 };
