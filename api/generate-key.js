@@ -17,7 +17,16 @@ module.exports = async function handler(req, res) {
   const key = `LUM-${seg()}-${seg()}-${seg()}`;
   const expires_at = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
 
-  const { error } = await supabase.from("keys").insert({
+const { token } = req.body || {};
+if (!token) return res.status(403).json({ error: "Complete the verification link first." });
+
+const verify = await fetch(`https://api.linkvertise.com/v1/token/verify`, {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ token, api_key: process.env.LINKVERTISE_API_KEY })
+});
+const vData = await verify.json();
+if (!vData.success) return res.status(403).json({ error: "Verification failed. Please complete the link." });
     key,
     used: false,
     hwid: null,
