@@ -341,8 +341,8 @@ tr:hover td{background:#0c0c14}
   padding:16px 0;border-bottom:1px solid var(--ln);gap:16px;
 }
 .sr:last-child{border-bottom:none}
-.sl{font-size:13px;font-weight:600;margin-bottom:4px;letter-spacing:-.1px}
-.sd2{font-size:12px;color:var(--t2);line-height:1.4}
+.sl{font-size:12px;color:var(--t2);font-weight:500;margin-bottom:4px;letter-spacing:-.1px}
+.sd2{font-size:12px;color:var(--t3);line-height:1.4}
 
 .tg{position:relative;width:42px;height:24px;flex-shrink:0}
 .tg input{opacity:0;width:0;height:0;position:absolute}
@@ -366,7 +366,7 @@ tr:hover td{background:#0c0c14}
 .mv{font-size:13px;font-weight:700}
 
 .pb{height:4px;background:var(--b4);border-radius:3px;overflow:hidden;margin-top:8px}
-.pf{height:100%;border-radius:3px;transition:width .6s cubic-bezier(.16,1,.3,1)}
+.pf{border-radius:3px;transition:width .6s cubic-bezier(.16,1,.3,1)}
 .pg{background:linear-gradient(90deg,var(--gr),#5af0b0)}
 .py{background:linear-gradient(90deg,var(--ye),#ffda85)}
 .pr{background:linear-gradient(90deg,var(--re),#ff9ba3)}
@@ -414,7 +414,7 @@ tr:hover td{background:#0c0c14}
       <div class="l-card-s">Enter your credentials to continue.</div>
       <div class="fi">
         <label>Password</label>
-        <input type="password" id="pwI" placeholder="••••••••••••" autocomplete="current-password"/>
+        <input type="password" id="pwI" placeholder="•••••••••••" autocomplete="current-password"/>
       </div>
       <div class="em-box"><div class="em" id="lErr" style="display:none"></div></div>
       <button class="btn btnp btn-fw" id="lBtn">Continue →</button>
@@ -484,8 +484,8 @@ tr:hover td{background:#0c0c14}
             <div class="cb">
               <div class="mr"><div class="ml">Usage rate</div><div class="mv" id="mUr">—</div></div>
               <div class="mr"><div class="ml">Expiry rate</div><div class="mv" id="mEr">—</div></div>
-              <div class="mr"><div class="ml">Expiring &lt; 1h</div><div class="mv c-r" id="mE1">—</div></div>
-              <div class="mr"><div class="ml">Expiring &lt; 6h</div><div class="mv c-y" id="mE6">—</div></div>
+              <div class="mr"><div class="ml">Expiring &​lt; 1h</div><div class="mv c-r" id="mE1">—</div></div>
+              <div class="mr"><div class="ml">Expiring &​lt; 6h</div><div class="mv c-y" id="mE6">—</div></div>
               <div class="mr"><div class="ml">HWID locked</div><div class="mv" id="mHw">—</div></div>
             </div>
           </div>
@@ -650,30 +650,303 @@ tr:hover td{background:#0c0c14}
 
     </div>
   </div>
+</div>
 
-    <div class="toast" id="toast"></div>
+<div class="toast" id="toast"></div>
 
-    <script>
-    (function(){
-    'use strict';
+<script>
+(function(){
+'use strict';
 
-    const _f=window.fetch.bind(window);
-    const API=window.location.origin;
-    const SK='_lx';
-    const CK='_lcfg';
-    const FP='_fp';
-    const SS='_ss';
-    const AL='_al';
-    const DEF_CFG={autoRefresh:true,showHwid:true,showUsedAt:true,confirmDel:true,rowCopy:false,dense:false};
+const _f=window.fetch.bind(window);
+const API=window.location.origin;
+const SK='_lx';
+const CK='_lcfg';
+const FP='_fp';
+const SS='_ss';
+const AL='_al';
+const DEF_CFG={autoRefresh:true,showHwid:true,showUsedAt:true,confirmDel:true,rowCopy:false,dense:false};
 
-    let tok='',keys=[],act=[],rT=null,toT=null;
-    let cfg={...DEF_CFG};
-    let sessionStart=Date.now();
-    let lastActivity=Date.now();
-    let securityChecks={};
+let tok='',keys=[],act=[],rT=null,toT=null;
+let cfg={...DEF_CFG};
+let sessionStart=Date.now();
+let lastActivity=Date.now();
+let securityChecks={};
 
-    function loadCfg(){
-      try{const c=JSON.parse(localStorage.getItem(CK)||'null');if(c)cfg={...DEF_CFG,...c};}catch{}
+function loadCfg(){
+  try{const c=JSON.parse(localStorage.getItem(CK)||'null');if(c)cfg={...DEF_CFG,...c};}catch{}
+}
+function saveCfg(){try{localStorage.setItem(CK,JSON.stringify(cfg));}catch{}}
+
+function q(id){return document.getElementById(id)}
+function qs(sel){return document.querySelector(sel)}
+function qsa(sel){return document.querySelectorAll(sel)}
+
+function setTxt(id,v){const e=q(id);if(e)e.textContent=v}
+
+let toastQ=[];
+function toast(msg,type='ok'){
+  const el=q('toast');
+  el.textContent=msg;
+  el.className='toast show '+type;
+  clearTimeout(toT);
+  toT=setTimeout(()=>{el.className='toast';},2400);
+}
+
+function showErr(msg){
+  const e=q('lErr');
+  if(!e)return;
+  e.textContent=msg;
+  e.style.display=msg?'flex':'none';
+}
+
+function detectTampering(){
+  if(window.outerHeight-window.innerHeight>200||window.outerWidth-window.innerWidth>200)return true;
+  if(window.console&&(console.debug||console.table)){
+    const start=performance.now();
+    debugger;
+    if(performance.now()-start>100)return true;
+  }
+  if(document.querySelector('[style*="display: none"]'))return true;
+  if(performance.memory&&performance.memory.usedJSHeapSize>performance.memory.totalJSHeapSize*1.5)return true;
+  return false;
+}
+
+function getWebGLFingerprint(){
+  try{
+    const canvas=document.createElement('canvas');
+    const gl=canvas.getContext('webgl')||canvas.getContext('experimental-webgl');
+    if(!gl)return 'none';
+    return gl.getParameter(gl.VENDOR)+'|'+gl.getParameter(gl.RENDERER)+'|'+gl.getParameter(gl.VERSION);
+  }catch{return 'error';}
+}
+
+function detectFonts(){
+  const testFonts=['Arial','Helvetica','Times New Roman','Courier New','Verdana','Georgia','Palatino','Garamond','Bookman','Comic Sans MS','Trebuchet MS','Arial Black','Impact'];
+  const detected=[];
+  const canvas=document.createElement('canvas');
+  const ctx=canvas.getContext('2d');
+  
+  testFonts.forEach(font=>{
+    ctx.font='72px monospace';
+    const baseline=ctx.measureText('mmmmmmmmmmlli').width;
+    ctx.font=`72px '${font}', monospace`;
+    if(ctx.measureText('mmmmmmmmmmlli').width!==baseline){
+      detected.push(font);
+    }
+  });
+  
+  return detected.slice(0,8).join(',');
+}
+
+function getAudioFingerprint(){
+  try{
+    const AudioContext=window.AudioContext||window.webkitAudioContext;
+    const context=new AudioContext();
+    const oscillator=context.createOscillator();
+    const analyser=context.createAnalyser();
+    const gain=context.createGain();
+    
+    oscillator.connect(analyser);
+    analyser.connect(gain);
+    oscillator.start(0);
+    
+    const data=new Uint8Array(analyser.frequencyBinCount);
+    analyser.getByteFrequencyData(data);
+    
+    oscillator.stop();
+    context.close();
+    
+    return Array.from(data.slice(0,16)).join('');
+  }catch{return 'error';}
+}
+
+function generateSessionFingerprint(){
+  const canvas=document.createElement('canvas');
+  const ctx=canvas.getContext('2d');
+  ctx.textBaseline='top';
+  ctx.font='14px Arial';
+  ctx.fillText('Device fingerprint',2,2);
+  
+  const fingerprint={
+    canvas:canvas.toDataURL(),
+    userAgent:navigator.userAgent.substring(0,200),
+    language:navigator.language,
+    platform:navigator.platform,
+    screen:screen.width+'x'+screen.height,
+    timezone:Intl.DateTimeFormat().resolvedOptions().timeZone,
+    webgl:getWebGLFingerprint(),
+    fonts:detectFonts(),
+    audio:getAudioFingerprint(),
+    memory:navigator.deviceMemory||0,
+    cores:navigator.hardwareConcurrency||0,
+    connection:navigator.connection?navigator.connection.effectiveType:'unknown',
+    vendor:navigator.vendor||'unknown',
+    timestamp:Date.now()
+  };
+  
+  return btoa(JSON.stringify(fingerprint)).substring(0,128);
+}
+
+function checkSecurityViolations(){
+  const violations=JSON.parse(localStorage.getItem(AL)||'[]');
+  const now=Date.now();
+  const recentViolations=violations.filter(v=>now-v.time<3600000);
+  
+  if(recentViolations.length>=5){
+    return true;
+  }
+  
+  if(recentViolations.length>=3){
+    const lastViolation=recentViolations[recentViolations.length-1];
+    if(now-lastViolation.time<300000){
+      return true;
+    }
+  }
+  
+  return false;
+}
+
+function recordViolation(type,details){
+  const violations=JSON.parse(localStorage.getItem(AL)||'[]');
+  violations.push({
+    type,
+    details,
+    time:Date.now(),
+    fingerprint:generateSessionFingerprint()
+  });
+  
+  const recent=violations.filter(v=>Date.now()-v.time<3600000);
+  localStorage.setItem(AL,JSON.stringify(recent.slice(-10)));
+}
+
+function createSecureToken(){
+  const timestamp=Date.now();
+  const fingerprint=generateSessionFingerprint();
+  const random=Math.random().toString(36).substring(2);
+  const combined=`${timestamp}-${fingerprint}-${random}-${tok}`;
+  
+  let encoded=btoa(combined);
+  encoded=encoded.split('').reverse().join('');
+  encoded=btoa(encoded+timestamp);
+  return encoded.substring(0,128);
+}
+
+function validateSession(){
+  const currentFp=generateSessionFingerprint();
+  const storedFp=localStorage.getItem(FP);
+  const sessionData=JSON.parse(localStorage.getItem(SS)||'null');
+  
+  if(!storedFp||!sessionData){
+    return false;
+  }
+  
+  if(currentFp!==storedFp){
+    return false;
+  }
+  
+  const sessionAge=Date.now()-sessionData.startTime;
+  const maxSessionAge=2*60*60*1000;
+  
+  if(sessionAge>maxSessionAge){
+    return false;
+  }
+  
+  const inactivityTime=Date.now()-sessionData.lastActivity;
+  const maxInactivity=30*60*1000;
+  
+  if(inactivityTime>maxInactivity){
+    return false;
+  }
+  
+  return true;
+}
+
+function updateSessionActivity(){
+  const sessionData={
+    startTime:sessionStart,
+    lastActivity:Date.now(),
+    fingerprint:generateSessionFingerprint()
+  };
+  
+  localStorage.setItem(FP,sessionData.fingerprint);
+  localStorage.setItem(SS,JSON.stringify(sessionData));
+  lastActivity=Date.now();
+}
+
+async function req(url,opts={}){
+  if(detectTampering()){
+    recordViolation('tampering','DOM or debugger detected');
+    forceLogout();
+    return null;
+  }
+  
+  if(Date.now()-lastActivity>30*60*1000){
+    recordViolation('inactivity','Session expired due to inactivity');
+    forceLogout();
+    return null;
+  }
+  
+  const secureToken=createSecureToken();
+  const r=await _f(url,{
+    ...opts,
+    headers:{
+      ...(opts.headers||{}),
+      'Authorization':'Bearer '+tok,
+      'X-Security-Token':secureToken,
+      'X-Session-Fingerprint':generateSessionFingerprint()
+    }
+  });
+  
+  if(r.status===401){
+    recordViolation('auth','Unauthorized access attempt');
+    forceLogout();
+    return null;
+  }
+  
+  if(r.status===429){
+    recordViolation('rate_limit','Too many requests');
+    toast('Rate limit exceeded. Please wait.','warn');
+    return null;
+  }
+  
+  updateSessionActivity();
+  return r;
+}
+
+function forceLogout(){
+  tok='';
+  try{
+    localStorage.removeItem(SK);
+    localStorage.removeItem(FP);
+    localStorage.removeItem(SS);
+    recordViolation('forced_logout','Security violation detected');
+  }catch{}
+  keys=[];act=[];
+  clearInterval(rT);
+  const dp=q('dp'),lp=q('lp');
+  dp.style.transition='opacity .25s';
+  dp.style.opacity='0';
+  setTimeout(()=>{
+    dp.classList.remove('on');
+    dp.style.opacity='';dp.style.transition='';
+    lp.classList.add('on');
+    q('lBtn').disabled=false;
+    q('lBtn').textContent='Continue →';
+    setTxt('lErr','');
+    q('lErr').style.display='none';
+  },240);
+}
+
+function addAct(msg,type){
+  act.unshift({msg,type,time:new Date()});
+  if(act.length>80)act.length=80;
+  renderAct();
+}
+
+function log(msg,type){
+  const el=q('conEl');
+  if(!el)return;
   const t=new Date().toLocaleTimeString();
   const d=document.createElement('div');
   d.className='ll';
@@ -986,7 +1259,7 @@ function renderAct(){
 }
 
 function esc(s){
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  return String(s).replace(/&/g,'&​amp;').replace(/</g,'&​lt;').replace(/>/g,'&​gt;').replace(/"/g,'&​quot;').replace(/'/g,'&​#39;');
 }
 
 function tbl(){
