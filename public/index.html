@@ -968,9 +968,6 @@ async function login(){
   showErr('');
   
   if(!pw){showErr('Enter your password.');return;}
-  if(pw.length<8){showErr('Password must be at least 8 characters.');return;}
-  if(!/[A-Z]/.test(pw)||!/[a-z]/.test(pw)||!/[0-9]/.test(pw)){
-    showErr('Password must contain uppercase, lowercase, and numbers.');return;
   }
   
   const loginFingerprint=generateSessionFingerprint();
@@ -1017,26 +1014,9 @@ async function login(){
       return;
     }
     
-    if(!d.token||d.token.length<32){
-      recordViolation('invalid_response','Invalid token received');
-      showErr('Security validation failed.');
-      btn.disabled=false;btn.textContent='Continue →';
-      return;
-    }
-    
-    tok=d.token;
+tok=d.token;
     sessionStart=Date.now();
-    updateSessionActivity();
-    
-    try{
-      localStorage.setItem(SK,tok);
-      localStorage.setItem(FP,loginFingerprint);
-    }catch(e){
-      recordViolation('storage_error','Failed to store session');
-      showErr('Browser security settings are blocking access.');
-      btn.disabled=false;btn.textContent='Continue →';
-      return;
-    }
+    try{localStorage.setItem(SK,tok);}catch{}
     
     q('pwI').value='';
     showDash();
@@ -1391,18 +1371,8 @@ function init(){
   
   try{
     tok=localStorage.getItem(SK)||'';
-    if(tok){
-      if(!validateSession()){
-        localStorage.removeItem(SK);
-        localStorage.removeItem(FP);
-        localStorage.removeItem(SS);
-        tok='';
-        addAct('Invalid session detected','warn');
-        return;
-      }
-      updateSessionActivity();
+if(tok){
       showDash();
-      addAct('Session restored','inf');
     }
   }catch(e){
     recordViolation('init_error','Initialization failed: '+e.message);
