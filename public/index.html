@@ -650,65 +650,30 @@ tr:hover td{background:#0c0c14}
 
     </div>
   </div>
-</div>
 
-<div class="toast" id="toast"></div>
+    <div class="toast" id="toast"></div>
 
-<script>
-(function(){
-'use strict';
+    <script>
+    (function(){
+    'use strict';
 
-const _f=window.fetch.bind(window);
-const API=window.location.origin;
-const SK='_lx';
-const CK='_lcfg';
-const DEF_CFG={autoRefresh:true,showHwid:true,showUsedAt:true,confirmDel:true,rowCopy:false,dense:false};
+    const _f=window.fetch.bind(window);
+    const API=window.location.origin;
+    const SK='_lx';
+    const CK='_lcfg';
+    const FP='_fp';
+    const SS='_ss';
+    const AL='_al';
+    const DEF_CFG={autoRefresh:true,showHwid:true,showUsedAt:true,confirmDel:true,rowCopy:false,dense:false};
 
-let tok='',keys=[],act=[],rT=null,toT=null;
-let cfg={...DEF_CFG};
+    let tok='',keys=[],act=[],rT=null,toT=null;
+    let cfg={...DEF_CFG};
+    let sessionStart=Date.now();
+    let lastActivity=Date.now();
+    let securityChecks={};
 
-function loadCfg(){
-  try{const c=JSON.parse(localStorage.getItem(CK)||'null');if(c)cfg={...DEF_CFG,...c};}catch{}
-}
-function saveCfg(){try{localStorage.setItem(CK,JSON.stringify(cfg));}catch{}}
-
-function q(id){return document.getElementById(id)}
-function qs(sel){return document.querySelector(sel)}
-function qsa(sel){return document.querySelectorAll(sel)}
-
-function setTxt(id,v){const e=q(id);if(e)e.textContent=v}
-
-let toastQ=[];
-function toast(msg,type='ok'){
-  const el=q('toast');
-  el.textContent=msg;
-  el.className='toast show '+type;
-  clearTimeout(toT);
-  toT=setTimeout(()=>{el.className='toast';},2400);
-}
-
-function showErr(msg){
-  const e=q('lErr');
-  if(!e)return;
-  e.textContent=msg;
-  e.style.display=msg?'flex':'none';
-}
-
-async function req(url,opts={}){
-  const r=await _f(url,{...opts,headers:{...(opts.headers||{}),'Authorization':'Bearer '+tok}});
-  if(r.status===401){logout();return null;}
-  return r;
-}
-
-function addAct(msg,type){
-  act.unshift({msg,type,time:new Date()});
-  if(act.length>80)act.length=80;
-  renderAct();
-}
-
-function log(msg,type='inf'){
-  const el=q('conEl');
-  if(!el)return;
+    function loadCfg(){
+      try{const c=JSON.parse(localStorage.getItem(CK)||'null');if(c)cfg={...DEF_CFG,...c};}catch{}
   const t=new Date().toLocaleTimeString();
   const d=document.createElement('div');
   d.className='ll';
@@ -720,30 +685,93 @@ function log(msg,type='inf'){
 }
 
 async function login(){
+  if(checkSecurityViolations()){
+    showErr('Access denied. Too many security violations.');
+    return;
+  }
+  
   const pw=q('pwI').value;
   const btn=q('lBtn');
   showErr('');
+  
   if(!pw){showErr('Enter your password.');return;}
+  if(pw.length<8){showErr('Password must be at least 8 characters.');return;}
+  if(!/[A-Z]/.test(pw)||!/[a-z]/.test(pw)||!/[0-9]/.test(pw)){
+    showErr('Password must contain uppercase, lowercase, and numbers.');return;
+  }
+  
+  const loginFingerprint=generateSessionFingerprint();
+  const startTime=performance.now();
+  
   btn.disabled=true;
-  btn.innerHTML='<span class="spin"></span> Signing in…';
+  btn.innerHTML='<span class="spin"></span> Authenticating…';
+  
   try{
     const r=await _f(API+'/api/login',{
       method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({password:pw})
+      headers:{
+        'Content-Type':'application/json',
+        'X-Login-Fingerprint':loginFingerprint,
+        'X-Security-Version':'3.0',
+        'X-Timestamp':Date.now().toString()
+      },
+      body:JSON.stringify({
+        password:pw,
+        fingerprint:loginFingerprint,
+        clientInfo:{
+          userAgent:navigator.userAgent,
+          platform:navigator.platform,
+          language:navigator.language,
+          screen:screen.width+'x'+screen.height,
+          timezone:Intl.DateTimeFormat().resolvedOptions().timeZone
+        }
+      })
     });
-    const d=await r.json();
-    if(!r.ok){
-      showErr(d.error||'Wrong password.');
+    
+    const responseTime=performance.now()-startTime;
+    if(responseTime<50){
+      recordViolation('suspicious_timing','Login response too fast');
+      showErr('Security check failed. Please try again.');
       btn.disabled=false;btn.textContent='Continue →';
       return;
     }
+    
+    const d=await r.json();
+    if(!r.ok){
+      recordViolation('failed_login','Invalid credentials: '+d.error);
+      showErr(d.error||'Authentication failed.');
+      btn.disabled=false;btn.textContent='Continue →';
+      return;
+    }
+    
+    if(!d.token||d.token.length<32){
+      recordViolation('invalid_response','Invalid token received');
+      showErr('Security validation failed.');
+      btn.disabled=false;btn.textContent='Continue →';
+      return;
+    }
+    
     tok=d.token;
-    try{localStorage.setItem(SK,tok);}catch{}
+    sessionStart=Date.now();
+    updateSessionActivity();
+    
+    try{
+      localStorage.setItem(SK,tok);
+      localStorage.setItem(FP,loginFingerprint);
+    }catch(e){
+      recordViolation('storage_error','Failed to store session');
+      showErr('Browser security settings are blocking access.');
+      btn.disabled=false;btn.textContent='Continue →';
+      return;
+    }
+    
     q('pwI').value='';
     showDash();
-  }catch{
-    showErr('Could not connect. Check your internet.');
+    addAct('Secure login established','ok');
+    
+  }catch(e){
+    recordViolation('network_error','Login request failed: '+e.message);
+    showErr('Connection failed. Check your internet and try again.');
     btn.disabled=false;btn.textContent='Continue →';
   }
 }
@@ -1080,11 +1108,78 @@ function initEvents(){
 }
 
 function init(){
+  if(detectTampering()){
+    document.body.innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:100vh;background:#07070b;color:#ff6b78;font-family:monospace">SECURITY VIOLATION DETECTED</div>';
+    return;
+  }
+  
   loadCfg();
   initEvents();
-  try{tok=localStorage.getItem(SK)||'';}catch{}
-  if(tok){showDash();}
+  
+  try{
+    tok=localStorage.getItem(SK)||'';
+    if(tok){
+      if(!validateSession()){
+        localStorage.removeItem(SK);
+        localStorage.removeItem(FP);
+        localStorage.removeItem(SS);
+        tok='';
+        addAct('Invalid session detected','warn');
+        return;
+      }
+      updateSessionActivity();
+      showDash();
+      addAct('Session restored','inf');
+    }
+  }catch(e){
+    recordViolation('init_error','Initialization failed: '+e.message);
+  }
+  
   setInterval(chkSt,30000);
+  setInterval(()=>{
+    if(detectTampering()){
+      forceLogout();
+    }
+  },5000);
+  
+  setInterval(()=>{
+    if(Date.now()-lastActivity>30*60*1000){
+      recordViolation('inactivity','Session expired due to inactivity');
+      forceLogout();
+    }
+  },60000);
+  
+  document.addEventListener('visibilitychange',()=>{
+    if(document.hidden){
+      const hiddenTime=Date.now();
+      setTimeout(()=>{
+        if(document.hidden&&Date.now()-hiddenTime>5*60*1000){
+          recordViolation('long_hidden','Tab hidden for extended period');
+          forceLogout();
+        }
+      },5*60*1000);
+    }else{
+      updateSessionActivity();
+    }
+  });
+  
+  document.addEventListener('keydown',(e)=>{
+    if(e.key==='F12'||(e.ctrlKey&&e.shiftKey&&e.key==='I')||(e.ctrlKey&&e.shiftKey&&e.key==='J')||(e.ctrlKey&&e.key==='U')){
+      e.preventDefault();
+      recordViolation('dev_tools','Developer tools shortcut detected');
+      return false;
+    }
+  });
+  
+  if(window.performance&&window.performance.memory){
+    setInterval(()=>{
+      const memory=window.performance.memory;
+      if(memory.usedJSHeapSize>memory.totalJSHeapSize*1.5){
+        recordViolation('memory_anomaly','Memory usage anomaly detected');
+        forceLogout();
+      }
+    },10000);
+  }
 }
 
 init();
