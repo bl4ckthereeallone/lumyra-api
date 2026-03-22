@@ -43,79 +43,32 @@ button{cursor:pointer;border:none;background:none;outline:none}
 input,select,textarea{border:none;background:none;color:var(--t0);outline:none}
 input::placeholder,textarea::placeholder{color:var(--t3)}
 a{color:inherit;text-decoration:none}
-
 .page{display:none;height:100vh}
 .page.on{display:flex}
-
-#lp{
-  align-items:center;justify-content:center;
-  background:var(--bg);position:relative;overflow:hidden;
-}
-.lp-mesh{
-  position:absolute;inset:0;pointer-events:none;
-  background:
-    radial-gradient(ellipse 900px 700px at -10% 110%,#6272f80d 0%,transparent 55%),
-    radial-gradient(ellipse 600px 500px at 110% -5%,#c084fc08 0%,transparent 55%),
-    radial-gradient(ellipse 400px 300px at 50% 50%,#6272f805 0%,transparent 70%);
-}
-.lp-grid{
-  position:absolute;inset:0;pointer-events:none;
-  background-image:linear-gradient(var(--t4) 1px,transparent 1px),linear-gradient(90deg,var(--t4) 1px,transparent 1px);
-  background-size:48px 48px;
-  -webkit-mask-image:radial-gradient(ellipse 70% 70% at 50% 50%,black 30%,transparent 100%);
-  mask-image:radial-gradient(ellipse 70% 70% at 50% 50%,black 30%,transparent 100%);
-  opacity:0.35;
-}
-
+#lp{align-items:center;justify-content:center;background:var(--bg);position:relative;overflow:hidden;}
+.lp-mesh{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 900px 700px at -10% 110%,#6272f80d 0%,transparent 55%),radial-gradient(ellipse 600px 500px at 110% -5%,#c084fc08 0%,transparent 55%),radial-gradient(ellipse 400px 300px at 50% 50%,#6272f805 0%,transparent 70%);}
+.lp-grid{position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(var(--t4) 1px,transparent 1px),linear-gradient(90deg,var(--t4) 1px,transparent 1px);background-size:48px 48px;-webkit-mask-image:radial-gradient(ellipse 70% 70% at 50% 50%,black 30%,transparent 100%);mask-image:radial-gradient(ellipse 70% 70% at 50% 50%,black 30%,transparent 100%);opacity:0.35;}
 .lw{width:400px;position:relative;z-index:1;animation:pageIn .5s cubic-bezier(.16,1,.3,1) both}
 @keyframes pageIn{from{opacity:0;transform:translateY(18px) scale(.98)}to{opacity:1;transform:none}}
-
 .l-logo{display:flex;align-items:center;gap:12px;margin-bottom:10px}
-.l-ic{
-  width:38px;height:38px;border-radius:12px;
-  background:linear-gradient(135deg,var(--ac),#4a5bea);
-  display:flex;align-items:center;justify-content:center;
-  font-weight:800;font-size:17px;color:#fff;flex-shrink:0;
-  box-shadow:0 0 32px #6272f840,0 4px 12px #00000060;
-}
+.l-ic{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,var(--ac),#4a5bea);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:17px;color:#fff;flex-shrink:0;box-shadow:0 0 32px #6272f840,0 4px 12px #00000060;}
 .l-nm{font-weight:800;font-size:20px;letter-spacing:-.5px}
 .l-nm em{color:var(--ac3);font-style:normal}
 .l-nm span{color:var(--t2)}
 .l-sub{font-size:12px;color:var(--t3);margin-bottom:40px;letter-spacing:.04em;font-weight:500}
-
-.l-card{
-  background:var(--b1);border:1px solid var(--ln);
-  border-radius:22px;padding:32px;
-  box-shadow:0 40px 100px #00000070,inset 0 1px 0 #ffffff08;
-  position:relative;overflow:hidden;
-}
-.l-card::before{
-  content:'';position:absolute;top:-1px;left:30%;right:30%;height:1px;
-  background:linear-gradient(90deg,transparent,var(--ac),transparent);
-}
+.l-card{background:var(--b1);border:1px solid var(--ln);border-radius:22px;padding:32px;box-shadow:0 40px 100px #00000070,inset 0 1px 0 #ffffff08;position:relative;overflow:hidden;}
+.l-card::before{content:'';position:absolute;top:-1px;left:30%;right:30%;height:1px;background:linear-gradient(90deg,transparent,var(--ac),transparent);}
 .l-card-h{font-size:16px;font-weight:700;letter-spacing:-.3px;margin-bottom:4px}
 .l-card-s{font-size:12px;color:var(--t2);margin-bottom:26px;font-weight:400}
-
 .fi{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
 .fi label{font-size:11px;color:var(--t3);font-weight:600;text-transform:uppercase;letter-spacing:.1em}
-.fi input{
-  background:var(--b0);border:1.5px solid var(--ln);
-  border-radius:12px;color:var(--t0);padding:13px 16px;font-size:14px;
-  transition:border-color .2s,box-shadow .2s;
-}
+.fi input{background:var(--b0);border:1.5px solid var(--ln);border-radius:12px;color:var(--t0);padding:13px 16px;font-size:14px;transition:border-color .2s,box-shadow .2s;}
 .fi input:focus{border-color:var(--ac);box-shadow:0 0 0 4px var(--acd)}
-
 .em-box{min-height:18px;margin-bottom:14px}
 .em{font-size:12px;color:var(--re);display:flex;align-items:center;gap:6px;animation:shake .3s ease}
 @keyframes shake{0%,100%{transform:none}20%{transform:translateX(-4px)}60%{transform:translateX(4px)}}
 .em::before{content:'';width:5px;height:5px;border-radius:50%;background:currentColor;flex-shrink:0}
-
-.btn{
-  display:inline-flex;align-items:center;justify-content:center;gap:7px;
-  font-size:13px;font-weight:600;padding:11px 20px;border-radius:11px;
-  transition:transform .15s,opacity .15s,background .15s,box-shadow .15s;
-  letter-spacing:.01em;position:relative;overflow:hidden;
-}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;font-size:13px;font-weight:600;padding:11px 20px;border-radius:11px;transition:transform .15s,opacity .15s,background .15s,box-shadow .15s;letter-spacing:.01em;position:relative;overflow:hidden;}
 .btn::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.06) 0%,transparent 60%);pointer-events:none}
 .btn:disabled{opacity:.3;cursor:not-allowed}
 .btn:active:not(:disabled){transform:scale(.97)}
@@ -133,105 +86,44 @@ a{color:inherit;text-decoration:none}
 .btn-fw{width:100%}
 .spin{display:inline-block;width:13px;height:13px;border:2px solid rgba(255,255,255,.15);border-top-color:rgba(255,255,255,.8);border-radius:50%;animation:sp .65s linear infinite}
 @keyframes sp{to{transform:rotate(360deg)}}
-
 .l-foot{margin-top:20px;font-size:11px;color:var(--t4);text-align:center;letter-spacing:.06em;font-weight:500}
-
 #dp{flex-direction:column;background:var(--bg)}
-
-.tb{
-  height:54px;background:var(--b0);border-bottom:1px solid var(--ln);
-  display:flex;align-items:center;justify-content:space-between;padding:0 24px;
-  flex-shrink:0;position:sticky;top:0;z-index:200;
-  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
-}
+.tb{height:54px;background:var(--b0);border-bottom:1px solid var(--ln);display:flex;align-items:center;justify-content:space-between;padding:0 24px;flex-shrink:0;position:sticky;top:0;z-index:200;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);}
 .tb-l{display:flex;align-items:center;gap:12px}
-.tb-ic{
-  width:26px;height:26px;border-radius:8px;
-  background:linear-gradient(135deg,var(--ac),#4a5bea);
-  display:flex;align-items:center;justify-content:center;
-  font-weight:800;font-size:12px;color:#fff;
-  box-shadow:0 0 14px #6272f840;flex-shrink:0;
-}
+.tb-ic{width:26px;height:26px;border-radius:8px;background:linear-gradient(135deg,var(--ac),#4a5bea);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;color:#fff;box-shadow:0 0 14px #6272f840;flex-shrink:0;}
 .tb-nm{font-weight:700;font-size:13px;letter-spacing:-.3px}
 .tb-nm em{color:var(--ac3);font-style:normal}
 .tb-nm s{color:var(--ac);text-decoration:none}
 .tb-sep{width:1px;height:14px;background:var(--ln)}
 .tb-pg{color:var(--t3);font-size:12px;font-weight:500;transition:color .2s}
 .tb-r{display:flex;align-items:center;gap:10px}
-.st-pill{
-  display:flex;align-items:center;gap:7px;
-  background:var(--b2);border:1px solid var(--ln);
-  border-radius:9px;padding:6px 12px;font-size:11px;color:var(--t3);
-  font-weight:500;
-}
+.st-pill{display:flex;align-items:center;gap:7px;background:var(--b2);border:1px solid var(--ln);border-radius:9px;padding:6px 12px;font-size:11px;color:var(--t3);font-weight:500;}
 .sd{width:6px;height:6px;border-radius:50%;background:var(--t4);flex-shrink:0;transition:all .4s}
 .sd.on{background:var(--gr);box-shadow:0 0 8px var(--gr)}
 .sd.off{background:var(--re);box-shadow:0 0 8px var(--re)}
-
 .wr{display:flex;flex:1;min-height:0;overflow:hidden}
-
-.sb{
-  width:224px;flex-shrink:0;
-  background:var(--b0);border-right:1px solid var(--ln);
-  display:flex;flex-direction:column;padding:16px 10px;
-  gap:2px;overflow-y:auto;
-}
-.nb{
-  font-size:10px;color:var(--t4);font-weight:700;
-  text-transform:uppercase;letter-spacing:.1em;
-  padding:10px 12px 5px;
-}
-.ni{
-  display:flex;align-items:center;gap:10px;
-  padding:10px 12px;border-radius:11px;cursor:pointer;
-  color:var(--t3);font-size:13px;font-weight:500;
-  transition:all .18s cubic-bezier(.16,1,.3,1);
-  border:1px solid transparent;user-select:none;
-  position:relative;
-}
+.sb{width:224px;flex-shrink:0;background:var(--b0);border-right:1px solid var(--ln);display:flex;flex-direction:column;padding:16px 10px;gap:2px;overflow-y:auto;}
+.nb{font-size:10px;color:var(--t4);font-weight:700;text-transform:uppercase;letter-spacing:.1em;padding:10px 12px 5px;}
+.ni{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:11px;cursor:pointer;color:var(--t3);font-size:13px;font-weight:500;transition:all .18s cubic-bezier(.16,1,.3,1);border:1px solid transparent;user-select:none;position:relative;}
 .ni:hover{background:var(--b3);color:var(--t1)}
-.ni.on{
-  background:var(--acd2);color:var(--ac3);
-  border-color:var(--acd2);font-weight:600;
-}
-.ni.on::before{
-  content:'';position:absolute;left:0;top:20%;bottom:20%;
-  width:2px;background:var(--ac);border-radius:0 2px 2px 0;
-}
-.ni-ic{
-  width:22px;height:22px;border-radius:7px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:12px;flex-shrink:0;background:var(--b3);
-  transition:background .18s;
-}
+.ni.on{background:var(--acd2);color:var(--ac3);border-color:var(--acd2);font-weight:600;}
+.ni.on::before{content:'';position:absolute;left:0;top:20%;bottom:20%;width:2px;background:var(--ac);border-radius:0 2px 2px 0;}
+.ni-ic{width:22px;height:22px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;background:var(--b3);transition:background .18s;}
 .ni.on .ni-ic{background:var(--acd2);color:var(--ac)}
 .ni:hover:not(.on) .ni-ic{background:var(--b4)}
 .nsep{height:1px;background:var(--ln);margin:8px 6px}
-
 .mn{flex:1;overflow-y:auto;padding:28px;background:var(--bg);scroll-behavior:smooth}
 .sc{display:none;animation:scIn .28s cubic-bezier(.16,1,.3,1)}
 @keyframes scIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 .sc.on{display:block}
-
 .ph{margin-bottom:26px}
 .pt{font-size:22px;font-weight:800;letter-spacing:-.6px;margin-bottom:5px}
 .ps{font-size:13px;color:var(--t2);font-weight:400}
-
 .g4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
 .g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px}
-
-.st{
-  background:var(--b1);border:1px solid var(--ln);
-  border-radius:16px;padding:20px 22px;
-  transition:border-color .2s,transform .2s,box-shadow .2s;
-  cursor:default;position:relative;overflow:hidden;
-}
-.st::after{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(135deg,rgba(255,255,255,.025) 0%,transparent 60%);
-  pointer-events:none;
-}
+.st{background:var(--b1);border:1px solid var(--ln);border-radius:16px;padding:20px 22px;transition:border-color .2s,transform .2s,box-shadow .2s;cursor:default;position:relative;overflow:hidden;}
+.st::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.025) 0%,transparent 60%);pointer-events:none;}
 .st:hover{transform:translateY(-1px);box-shadow:0 8px 32px #00000040}
 .st-a{border-color:var(--acd2)}
 .st-g{border-color:#3ecf8e20}
@@ -244,88 +136,49 @@ a{color:inherit;text-decoration:none}
 .c-g{color:var(--gr)}
 .c-r{color:var(--re)}
 .c-y{color:var(--ye)}
-
-.cd{
-  background:var(--b1);border:1px solid var(--ln);
-  border-radius:16px;overflow:hidden;margin-bottom:14px;
-  transition:border-color .2s;
-}
+.cd{background:var(--b1);border:1px solid var(--ln);border-radius:16px;overflow:hidden;margin-bottom:14px;transition:border-color .2s;}
 .cd:hover{border-color:var(--ln2)}
-.ch{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:16px 22px;border-bottom:1px solid var(--ln);
-}
+.ch{display:flex;align-items:center;justify-content:space-between;padding:16px 22px;border-bottom:1px solid var(--ln);}
 .ct{font-size:13px;font-weight:700;letter-spacing:-.2px;display:flex;align-items:center;gap:8px}
 .ca{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .cb{padding:18px 22px}
-
-.inp{
-  background:var(--b0);border:1.5px solid var(--ln);
-  border-radius:10px;color:var(--t0);padding:10px 14px;font-size:13px;
-  transition:border-color .18s,box-shadow .18s;display:block;
-}
+.inp{background:var(--b0);border:1.5px solid var(--ln);border-radius:10px;color:var(--t0);padding:10px 14px;font-size:13px;transition:border-color .18s,box-shadow .18s;display:block;}
 .inp:focus{border-color:var(--ac);box-shadow:0 0 0 3px var(--acd)}
 .inp-sm{width:90px}
 .inp-md{width:160px}
 .inp-fw{width:100%}
 .inp-sel{appearance:none;cursor:pointer;padding-right:28px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' fill='none'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23444460' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center}
-
 .ir{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .ht{font-size:12px;color:var(--t3);line-height:1.5}
 .dv{height:1px;background:var(--ln);margin:16px 0}
-
 table{width:100%;border-collapse:collapse}
-th{
-  text-align:left;font-size:10px;font-weight:700;color:var(--t3);
-  text-transform:uppercase;letter-spacing:.1em;
-  padding:12px 18px;border-bottom:1px solid var(--ln);
-  position:sticky;top:0;background:var(--b1);z-index:1;
-}
+th{text-align:left;font-size:10px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;padding:12px 18px;border-bottom:1px solid var(--ln);position:sticky;top:0;background:var(--b1);z-index:1;}
 td{padding:13px 18px;border-bottom:1px solid #0d0d16;vertical-align:middle;font-size:13px}
 tr:last-child td{border-bottom:none}
 tr{transition:background .1s}
 tr:hover td{background:#0c0c14}
-
 .km{font-family:'JetBrains Mono',monospace;color:var(--ac3);font-size:12px;letter-spacing:.02em}
-.cpb{
-  background:none;border:none;color:var(--t4);font-size:10px;
-  padding:3px 8px;border-radius:6px;cursor:pointer;
-  transition:color .12s,background .12s;margin-left:4px;font-weight:500;
-}
+.cpb{background:none;border:none;color:var(--t4);font-size:10px;padding:3px 8px;border-radius:6px;cursor:pointer;transition:color .12s,background .12s;margin-left:4px;font-weight:500;}
 .cpb:hover{color:var(--t0);background:var(--b3)}
-
-.bg{
-  display:inline-flex;align-items:center;gap:5px;
-  border-radius:7px;padding:4px 9px;font-size:11px;font-weight:700;
-  letter-spacing:.02em;
-}
+.bg{display:inline-flex;align-items:center;gap:5px;border-radius:7px;padding:4px 9px;font-size:11px;font-weight:700;letter-spacing:.02em;}
 .bg::before{content:'';width:5px;height:5px;border-radius:50%;background:currentColor;flex-shrink:0}
 .bg-g{background:var(--grd);color:var(--gr)}
 .bg-r{background:var(--red);color:var(--re)}
 .bg-n{background:var(--b3);color:var(--t3)}
 .bg-y{background:var(--yed);color:var(--ye)}
 .bg-a{background:var(--acd);color:var(--ac)}
-
 .emp{text-align:center;padding:60px 20px;color:var(--t3);font-size:13px}
 .emp-ic{font-size:36px;margin-bottom:12px;opacity:.15}
 .dm{color:var(--t3)}
 .mono{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--t2)}
-
-.cw{
-  overflow-y:auto;padding:14px 18px;
-  display:flex;flex-direction:column;gap:4px;background:var(--b0);
-}
+.cw{overflow-y:auto;padding:14px 18px;display:flex;flex-direction:column;gap:4px;background:var(--b0);}
 .ll{display:flex;gap:12px;font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.7;align-items:baseline}
 .lt{color:var(--t4);flex-shrink:0;min-width:80px}
 .lok{color:var(--gr)}
 .ler{color:var(--re)}
 .lin{color:var(--t2)}
 .lwa{color:var(--ye)}
-
-.ai{
-  display:flex;align-items:flex-start;gap:12px;
-  padding:12px 0;border-bottom:1px solid var(--ln);
-}
+.ai{display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid var(--ln);}
 .ai:last-child{border-bottom:none}
 .a-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:5px}
 .a-dot.ok{background:var(--gr);box-shadow:0 0 8px var(--gr)}
@@ -335,63 +188,35 @@ tr:hover td{background:#0c0c14}
 .aw{flex:1;min-width:0}
 .am{font-size:13px;color:var(--t0);font-weight:500}
 .at{font-size:11px;color:var(--t3);margin-top:2px;font-family:'JetBrains Mono',monospace}
-
-.sr{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:16px 0;border-bottom:1px solid var(--ln);gap:16px;
-}
+.sr{display:flex;align-items:center;justify-content:space-between;padding:16px 0;border-bottom:1px solid var(--ln);gap:16px;}
 .sr:last-child{border-bottom:none}
 .sl{font-size:12px;color:var(--t2);font-weight:500;margin-bottom:4px;letter-spacing:-.1px}
 .sd2{font-size:12px;color:var(--t3);line-height:1.4}
-
 .tg{position:relative;width:42px;height:24px;flex-shrink:0}
 .tg input{opacity:0;width:0;height:0;position:absolute}
-.tgt{
-  position:absolute;inset:0;background:var(--b4);
-  border:1.5px solid var(--ln);border-radius:12px;
-  transition:all .22s cubic-bezier(.16,1,.3,1);cursor:pointer;
-}
+.tgt{position:absolute;inset:0;background:var(--b4);border:1.5px solid var(--ln);border-radius:12px;transition:all .22s cubic-bezier(.16,1,.3,1);cursor:pointer;}
 .tg input:checked + .tgt{background:var(--ac);border-color:var(--ac);box-shadow:0 0 12px #6272f840}
-.tgt::after{
-  content:'';position:absolute;left:3px;top:50%;transform:translateY(-50%);
-  width:15px;height:15px;background:#fff;border-radius:50%;
-  transition:left .22s cubic-bezier(.16,1,.3,1);
-  box-shadow:0 2px 6px #00000050;
-}
+.tgt::after{content:'';position:absolute;left:3px;top:50%;transform:translateY(-50%);width:15px;height:15px;background:#fff;border-radius:50%;transition:left .22s cubic-bezier(.16,1,.3,1);box-shadow:0 2px 6px #00000050;}
 .tg input:checked + .tgt::after{left:22px}
-
 .mr{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--ln)}
 .mr:last-child{border-bottom:none}
 .ml{font-size:12px;color:var(--t2);font-weight:500}
 .mv{font-size:13px;font-weight:700}
-
 .pb{height:4px;background:var(--b4);border-radius:3px;overflow:hidden;margin-top:8px}
 .pf{border-radius:3px;transition:width .6s cubic-bezier(.16,1,.3,1)}
 .pg{background:linear-gradient(90deg,var(--gr),#5af0b0)}
 .py{background:linear-gradient(90deg,var(--ye),#ffda85)}
 .pr{background:linear-gradient(90deg,var(--re),#ff9ba3)}
 .pa{background:linear-gradient(90deg,var(--ac),var(--ac3))}
-
-.toast{
-  position:fixed;bottom:22px;right:22px;
-  background:var(--b2);border:1px solid var(--ln2);
-  border-radius:14px;padding:13px 18px;font-size:13px;
-  opacity:0;transform:translateY(10px) scale(.97);
-  transition:opacity .22s,transform .22s;
-  pointer-events:none;z-index:9999;
-  box-shadow:0 12px 40px #00000070;
-  font-weight:500;max-width:240px;
-}
+.toast{position:fixed;bottom:22px;right:22px;background:var(--b2);border:1px solid var(--ln2);border-radius:14px;padding:13px 18px;font-size:13px;opacity:0;transform:translateY(10px) scale(.97);transition:opacity .22s,transform .22s;pointer-events:none;z-index:9999;box-shadow:0 12px 40px #00000070;font-weight:500;max-width:240px;}
 .toast.show{opacity:1;transform:none}
 .toast.ok{border-color:#3ecf8e28;color:var(--gr)}
 .toast.err{border-color:#ff6b7828;color:var(--re)}
 .toast.inf{border-color:#6272f828;color:var(--ac3)}
 .toast.warn{border-color:#f5c14e28;color:var(--ye)}
-
 .srw{position:relative;display:inline-flex;align-items:center}
 .srw-ic{position:absolute;left:12px;color:var(--t3);font-size:12px;pointer-events:none;z-index:1}
 .srw .inp{padding-left:32px}
-
 ::-webkit-scrollbar{width:4px;height:4px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:var(--ln);border-radius:3px}
@@ -414,7 +239,7 @@ tr:hover td{background:#0c0c14}
       <div class="l-card-s">Enter your credentials to continue.</div>
       <div class="fi">
         <label>Password</label>
-        <input type="password" id="pwI" placeholder="•••••••••••" autocomplete="current-password"/>
+        <input type="password" id="pwI" placeholder="••••••••••••" autocomplete="current-password"/>
       </div>
       <div class="em-box"><div class="em" id="lErr" style="display:none"></div></div>
       <button class="btn btnp btn-fw" id="lBtn">Continue →</button>
@@ -439,7 +264,6 @@ tr:hover td{background:#0c0c14}
       <button class="btn btng btn-sm" id="soBtn">Sign out</button>
     </div>
   </div>
-
   <div class="wr">
     <div class="sb">
       <div class="nb">Main</div>
@@ -451,32 +275,15 @@ tr:hover td{background:#0c0c14}
       <div class="ni" data-pg="ac"><span class="ni-ic">◈</span>Activity</div>
       <div class="ni" data-pg="se"><span class="ni-ic">⚙</span>Settings</div>
     </div>
-
     <div class="mn" id="mn">
 
       <div class="sc on" id="sc-ov">
         <div class="ph"><div class="pt">Overview</div><div class="ps">Your key system at a glance.</div></div>
         <div class="g4">
-          <div class="st st-a">
-            <div class="st-lb">Total Keys</div>
-            <div class="st-v c-a" id="sTotal">—</div>
-            <div class="st-s">All time</div>
-          </div>
-          <div class="st st-g">
-            <div class="st-lb">Active</div>
-            <div class="st-v c-g" id="sUsed">—</div>
-            <div class="st-s">In use</div>
-          </div>
-          <div class="st">
-            <div class="st-lb">Unused</div>
-            <div class="st-v" id="sUnused">—</div>
-            <div class="st-s">Available</div>
-          </div>
-          <div class="st st-r">
-            <div class="st-lb">Expired</div>
-            <div class="st-v c-r" id="sExpired">—</div>
-            <div class="st-s">Stale</div>
-          </div>
+          <div class="st st-a"><div class="st-lb">Total Keys</div><div class="st-v c-a" id="sTotal">—</div><div class="st-s">All time</div></div>
+          <div class="st st-g"><div class="st-lb">Active</div><div class="st-v c-g" id="sUsed">—</div><div class="st-s">In use</div></div>
+          <div class="st"><div class="st-lb">Unused</div><div class="st-v" id="sUnused">—</div><div class="st-s">Available</div></div>
+          <div class="st st-r"><div class="st-lb">Expired</div><div class="st-v c-r" id="sExpired">—</div><div class="st-s">Stale</div></div>
         </div>
         <div class="g2">
           <div class="cd">
@@ -484,8 +291,8 @@ tr:hover td{background:#0c0c14}
             <div class="cb">
               <div class="mr"><div class="ml">Usage rate</div><div class="mv" id="mUr">—</div></div>
               <div class="mr"><div class="ml">Expiry rate</div><div class="mv" id="mEr">—</div></div>
-              <div class="mr"><div class="ml">Expiring &​lt; 1h</div><div class="mv c-r" id="mE1">—</div></div>
-              <div class="mr"><div class="ml">Expiring &​lt; 6h</div><div class="mv c-y" id="mE6">—</div></div>
+              <div class="mr"><div class="ml">Expiring &lt; 1h</div><div class="mv c-r" id="mE1">—</div></div>
+              <div class="mr"><div class="ml">Expiring &lt; 6h</div><div class="mv c-y" id="mE6">—</div></div>
               <div class="mr"><div class="ml">HWID locked</div><div class="mv" id="mHw">—</div></div>
             </div>
           </div>
@@ -599,51 +406,30 @@ tr:hover td{background:#0c0c14}
         </div>
       </div>
 
-      <div class="sc" id="se-sc" id="sc-se">
+      <div class="sc" id="sc-se">
         <div class="ph"><div class="pt">Settings</div><div class="ps">Customize your experience.</div></div>
         <div class="g2">
           <div class="cd">
             <div class="ch"><div class="ct">Display</div></div>
             <div class="cb">
-              <div class="sr">
-                <div><div class="sl">Auto-refresh</div><div class="sd2">Reload keys every 30 seconds.</div></div>
-                <label class="tg"><input type="checkbox" id="sAR"/><div class="tgt"></div></label>
-              </div>
-              <div class="sr">
-                <div><div class="sl">Show HWID</div><div class="sd2">Display hardware ID in the table.</div></div>
-                <label class="tg"><input type="checkbox" id="sHW"/><div class="tgt"></div></label>
-              </div>
-              <div class="sr">
-                <div><div class="sl">Show Used At</div><div class="sd2">Display activation timestamp.</div></div>
-                <label class="tg"><input type="checkbox" id="sUA"/><div class="tgt"></div></label>
-              </div>
-              <div class="sr">
-                <div><div class="sl">Dense table</div><div class="sd2">Reduce row padding for density.</div></div>
-                <label class="tg"><input type="checkbox" id="sDT"/><div class="tgt"></div></label>
-              </div>
+              <div class="sr"><div><div class="sl">Auto-refresh</div><div class="sd2">Reload keys every 30 seconds.</div></div><label class="tg"><input type="checkbox" id="sAR"/><div class="tgt"></div></label></div>
+              <div class="sr"><div><div class="sl">Show HWID</div><div class="sd2">Display hardware ID in the table.</div></div><label class="tg"><input type="checkbox" id="sHW"/><div class="tgt"></div></label></div>
+              <div class="sr"><div><div class="sl">Show Used At</div><div class="sd2">Display activation timestamp.</div></div><label class="tg"><input type="checkbox" id="sUA"/><div class="tgt"></div></label></div>
+              <div class="sr"><div><div class="sl">Dense table</div><div class="sd2">Reduce row padding for density.</div></div><label class="tg"><input type="checkbox" id="sDT"/><div class="tgt"></div></label></div>
             </div>
           </div>
           <div class="cd">
             <div class="ch"><div class="ct">Behaviour</div></div>
             <div class="cb">
-              <div class="sr">
-                <div><div class="sl">Confirm deletes</div><div class="sd2">Show dialog before deleting.</div></div>
-                <label class="tg"><input type="checkbox" id="sCF"/><div class="tgt"></div></label>
-              </div>
-              <div class="sr">
-                <div><div class="sl">Click to copy</div><div class="sd2">Click any row to copy the key.</div></div>
-                <label class="tg"><input type="checkbox" id="sRC"/><div class="tgt"></div></label>
-              </div>
+              <div class="sr"><div><div class="sl">Confirm deletes</div><div class="sd2">Show dialog before deleting.</div></div><label class="tg"><input type="checkbox" id="sCF"/><div class="tgt"></div></label></div>
+              <div class="sr"><div><div class="sl">Click to copy</div><div class="sd2">Click any row to copy the key.</div></div><label class="tg"><input type="checkbox" id="sRC"/><div class="tgt"></div></label></div>
             </div>
           </div>
         </div>
         <div class="cd">
           <div class="ch"><div class="ct">Session</div></div>
           <div class="cb">
-            <div class="sr">
-              <div><div class="sl">Sign out</div><div class="sd2">End session and return to login.</div></div>
-              <button class="btn btnr btn-sm" id="soBtn2">Sign out</button>
-            </div>
+            <div class="sr"><div><div class="sl">Sign out</div><div class="sd2">End session and return to login.</div></div><button class="btn btnr btn-sm" id="soBtn2">Sign out</button></div>
           </div>
         </div>
       </div>
@@ -662,29 +448,19 @@ const _f=window.fetch.bind(window);
 const API=window.location.origin;
 const SK='_lx';
 const CK='_lcfg';
-const FP='_fp';
-const SS='_ss';
-const AL='_al';
 const DEF_CFG={autoRefresh:true,showHwid:true,showUsedAt:true,confirmDel:true,rowCopy:false,dense:false};
 
 let tok='',keys=[],act=[],rT=null,toT=null;
 let cfg={...DEF_CFG};
-let sessionStart=Date.now();
-let lastActivity=Date.now();
-let securityChecks={};
 
-function loadCfg(){
-  try{const c=JSON.parse(localStorage.getItem(CK)||'null');if(c)cfg={...DEF_CFG,...c};}catch{}
-}
+function loadCfg(){try{const c=JSON.parse(localStorage.getItem(CK)||'null');if(c)cfg={...DEF_CFG,...c};}catch{}}
 function saveCfg(){try{localStorage.setItem(CK,JSON.stringify(cfg));}catch{}}
 
 function q(id){return document.getElementById(id)}
 function qs(sel){return document.querySelector(sel)}
 function qsa(sel){return document.querySelectorAll(sel)}
-
 function setTxt(id,v){const e=q(id);if(e)e.textContent=v}
 
-let toastQ=[];
 function toast(msg,type='ok'){
   const el=q('toast');
   el.textContent=msg;
@@ -700,242 +476,10 @@ function showErr(msg){
   e.style.display=msg?'flex':'none';
 }
 
-function detectTampering(){
-  if(window.outerHeight-window.innerHeight>200||window.outerWidth-window.innerWidth>200)return true;
-  if(window.console&&(console.debug||console.table)){
-    const start=performance.now();
-    debugger;
-    if(performance.now()-start>100)return true;
-  }
-  if(document.querySelector('[style*="display: none"]'))return true;
-  if(performance.memory&&performance.memory.usedJSHeapSize>performance.memory.totalJSHeapSize*1.5)return true;
-  return false;
-}
-
-function getWebGLFingerprint(){
-  try{
-    const canvas=document.createElement('canvas');
-    const gl=canvas.getContext('webgl')||canvas.getContext('experimental-webgl');
-    if(!gl)return 'none';
-    return gl.getParameter(gl.VENDOR)+'|'+gl.getParameter(gl.RENDERER)+'|'+gl.getParameter(gl.VERSION);
-  }catch{return 'error';}
-}
-
-function detectFonts(){
-  const testFonts=['Arial','Helvetica','Times New Roman','Courier New','Verdana','Georgia','Palatino','Garamond','Bookman','Comic Sans MS','Trebuchet MS','Arial Black','Impact'];
-  const detected=[];
-  const canvas=document.createElement('canvas');
-  const ctx=canvas.getContext('2d');
-  
-  testFonts.forEach(font=>{
-    ctx.font='72px monospace';
-    const baseline=ctx.measureText('mmmmmmmmmmlli').width;
-    ctx.font=`72px '${font}', monospace`;
-    if(ctx.measureText('mmmmmmmmmmlli').width!==baseline){
-      detected.push(font);
-    }
-  });
-  
-  return detected.slice(0,8).join(',');
-}
-
-function getAudioFingerprint(){
-  try{
-    const AudioContext=window.AudioContext||window.webkitAudioContext;
-    const context=new AudioContext();
-    const oscillator=context.createOscillator();
-    const analyser=context.createAnalyser();
-    const gain=context.createGain();
-    
-    oscillator.connect(analyser);
-    analyser.connect(gain);
-    oscillator.start(0);
-    
-    const data=new Uint8Array(analyser.frequencyBinCount);
-    analyser.getByteFrequencyData(data);
-    
-    oscillator.stop();
-    context.close();
-    
-    return Array.from(data.slice(0,16)).join('');
-  }catch{return 'error';}
-}
-
-function generateSessionFingerprint(){
-  const canvas=document.createElement('canvas');
-  const ctx=canvas.getContext('2d');
-  ctx.textBaseline='top';
-  ctx.font='14px Arial';
-  ctx.fillText('Device fingerprint',2,2);
-  
-  const fingerprint={
-    canvas:canvas.toDataURL(),
-    userAgent:navigator.userAgent.substring(0,200),
-    language:navigator.language,
-    platform:navigator.platform,
-    screen:screen.width+'x'+screen.height,
-    timezone:Intl.DateTimeFormat().resolvedOptions().timeZone,
-    webgl:getWebGLFingerprint(),
-    fonts:detectFonts(),
-    audio:getAudioFingerprint(),
-    memory:navigator.deviceMemory||0,
-    cores:navigator.hardwareConcurrency||0,
-    connection:navigator.connection?navigator.connection.effectiveType:'unknown',
-    vendor:navigator.vendor||'unknown',
-    timestamp:Date.now()
-  };
-  
-  return btoa(JSON.stringify(fingerprint)).substring(0,128);
-}
-
-function checkSecurityViolations(){
-  const violations=JSON.parse(localStorage.getItem(AL)||'[]');
-  const now=Date.now();
-  const recentViolations=violations.filter(v=>now-v.time<3600000);
-  
-  if(recentViolations.length>=5){
-    return true;
-  }
-  
-  if(recentViolations.length>=3){
-    const lastViolation=recentViolations[recentViolations.length-1];
-    if(now-lastViolation.time<300000){
-      return true;
-    }
-  }
-  
-  return false;
-}
-
-function recordViolation(type,details){
-  const violations=JSON.parse(localStorage.getItem(AL)||'[]');
-  violations.push({
-    type,
-    details,
-    time:Date.now(),
-    fingerprint:generateSessionFingerprint()
-  });
-  
-  const recent=violations.filter(v=>Date.now()-v.time<3600000);
-  localStorage.setItem(AL,JSON.stringify(recent.slice(-10)));
-}
-
-function createSecureToken(){
-  const timestamp=Date.now();
-  const fingerprint=generateSessionFingerprint();
-  const random=Math.random().toString(36).substring(2);
-  const combined=`${timestamp}-${fingerprint}-${random}-${tok}`;
-  
-  let encoded=btoa(combined);
-  encoded=encoded.split('').reverse().join('');
-  encoded=btoa(encoded+timestamp);
-  return encoded.substring(0,128);
-}
-
-function validateSession(){
-  const currentFp=generateSessionFingerprint();
-  const storedFp=localStorage.getItem(FP);
-  const sessionData=JSON.parse(localStorage.getItem(SS)||'null');
-  
-  if(!storedFp||!sessionData){
-    return false;
-  }
-  
-  if(currentFp!==storedFp){
-    return false;
-  }
-  
-  const sessionAge=Date.now()-sessionData.startTime;
-  const maxSessionAge=2*60*60*1000;
-  
-  if(sessionAge>maxSessionAge){
-    return false;
-  }
-  
-  const inactivityTime=Date.now()-sessionData.lastActivity;
-  const maxInactivity=30*60*1000;
-  
-  if(inactivityTime>maxInactivity){
-    return false;
-  }
-  
-  return true;
-}
-
-function updateSessionActivity(){
-  const sessionData={
-    startTime:sessionStart,
-    lastActivity:Date.now(),
-    fingerprint:generateSessionFingerprint()
-  };
-  
-  localStorage.setItem(FP,sessionData.fingerprint);
-  localStorage.setItem(SS,JSON.stringify(sessionData));
-  lastActivity=Date.now();
-}
-
 async function req(url,opts={}){
-  if(detectTampering()){
-    recordViolation('tampering','DOM or debugger detected');
-    forceLogout();
-    return null;
-  }
-  
-  if(Date.now()-lastActivity>30*60*1000){
-    recordViolation('inactivity','Session expired due to inactivity');
-    forceLogout();
-    return null;
-  }
-  
-  const secureToken=createSecureToken();
-  const r=await _f(url,{
-    ...opts,
-    headers:{
-      ...(opts.headers||{}),
-      'Authorization':'Bearer '+tok,
-      'X-Security-Token':secureToken,
-      'X-Session-Fingerprint':generateSessionFingerprint()
-    }
-  });
-  
-  if(r.status===401){
-    recordViolation('auth','Unauthorized access attempt');
-    forceLogout();
-    return null;
-  }
-  
-  if(r.status===429){
-    recordViolation('rate_limit','Too many requests');
-    toast('Rate limit exceeded. Please wait.','warn');
-    return null;
-  }
-  
-  updateSessionActivity();
+  const r=await _f(url,{...opts,headers:{...(opts.headers||{}),'Authorization':'Bearer '+tok}});
+  if(r.status===401){logout();return null;}
   return r;
-}
-
-function forceLogout(){
-  tok='';
-  try{
-    localStorage.removeItem(SK);
-    localStorage.removeItem(FP);
-    localStorage.removeItem(SS);
-    recordViolation('forced_logout','Security violation detected');
-  }catch{}
-  keys=[];act=[];
-  clearInterval(rT);
-  const dp=q('dp'),lp=q('lp');
-  dp.style.transition='opacity .25s';
-  dp.style.opacity='0';
-  setTimeout(()=>{
-    dp.classList.remove('on');
-    dp.style.opacity='';dp.style.transition='';
-    lp.classList.add('on');
-    q('lBtn').disabled=false;
-    q('lBtn').textContent='Continue →';
-    setTxt('lErr','');
-    q('lErr').style.display='none';
-  },240);
 }
 
 function addAct(msg,type){
@@ -958,73 +502,30 @@ function log(msg,type){
 }
 
 async function login(){
-  if(checkSecurityViolations()){
-    showErr('Access denied. Too many security violations.');
-    return;
-  }
-  
   const pw=q('pwI').value;
   const btn=q('lBtn');
   showErr('');
-  
   if(!pw){showErr('Enter your password.');return;}
-  }
-  
-  const loginFingerprint=generateSessionFingerprint();
-  const startTime=performance.now();
-  
   btn.disabled=true;
-  btn.innerHTML='<span class="spin"></span> Authenticating…';
-  
+  btn.innerHTML='<span class="spin"></span> Signing in…';
   try{
     const r=await _f(API+'/api/login',{
       method:'POST',
-      headers:{
-        'Content-Type':'application/json',
-        'X-Login-Fingerprint':loginFingerprint,
-        'X-Security-Version':'3.0',
-        'X-Timestamp':Date.now().toString()
-      },
-      body:JSON.stringify({
-        password:pw,
-        fingerprint:loginFingerprint,
-        clientInfo:{
-          userAgent:navigator.userAgent,
-          platform:navigator.platform,
-          language:navigator.language,
-          screen:screen.width+'x'+screen.height,
-          timezone:Intl.DateTimeFormat().resolvedOptions().timeZone
-        }
-      })
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({password:pw})
     });
-    
-    const responseTime=performance.now()-startTime;
-    if(responseTime<50){
-      recordViolation('suspicious_timing','Login response too fast');
-      showErr('Security check failed. Please try again.');
-      btn.disabled=false;btn.textContent='Continue →';
-      return;
-    }
-    
     const d=await r.json();
     if(!r.ok){
-      recordViolation('failed_login','Invalid credentials: '+d.error);
-      showErr(d.error||'Authentication failed.');
+      showErr(d.error||'Wrong password.');
       btn.disabled=false;btn.textContent='Continue →';
       return;
     }
-    
-tok=d.token;
-    sessionStart=Date.now();
+    tok=d.token;
     try{localStorage.setItem(SK,tok);}catch{}
-    
     q('pwI').value='';
     showDash();
-    addAct('Secure login established','ok');
-    
-  }catch(e){
-    recordViolation('network_error','Login request failed: '+e.message);
-    showErr('Connection failed. Check your internet and try again.');
+  }catch{
+    showErr('Could not connect.');
     btn.disabled=false;btn.textContent='Continue →';
   }
 }
@@ -1036,8 +537,7 @@ function showDash(){
   setTimeout(()=>{
     lp.classList.remove('on');
     dp.classList.add('on');
-    lp.style.opacity='';
-    lp.style.transition='';
+    lp.style.opacity='';lp.style.transition='';
     applyCfg();load();chkSt();startRT();
     log('Session started.','inf');
   },280);
@@ -1067,7 +567,7 @@ function nav(el){
   el.classList.add('on');
   const pg=el.dataset.pg;
   qsa('.sc').forEach(s=>s.classList.remove('on'));
-  const sc=q('sc-'+pg)||q(pg+'-sc');
+  const sc=q('sc-'+pg);
   if(sc)sc.classList.add('on');
   setTxt('tbPg',el.textContent.trim());
 }
@@ -1131,11 +631,7 @@ async function gen(){
 async function delKey(id,key){
   if(cfg.confirmDel!==false&&!confirm('Delete '+key+'?'))return;
   try{
-    const r=await req(API+'/api/keys',{
-      method:'DELETE',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({id})
-    });
+    const r=await req(API+'/api/keys',{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({id})});
     if(!r)return;
     log('Deleted '+key+'.','ok');toast('Deleted','ok');
     await load();
@@ -1145,11 +641,7 @@ async function delKey(id,key){
 async function delAll(){
   if(!confirm('Delete ALL '+keys.length+' keys? This cannot be undone.'))return;
   try{
-    const r=await req(API+'/api/keys',{
-      method:'DELETE',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({deleteAll:true})
-    });
+    const r=await req(API+'/api/keys',{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({deleteAll:true})});
     if(!r)return;
     const d=await r.json();
     log('Deleted all ('+d.deleted+').','ok');toast('Deleted '+d.deleted,'ok');
@@ -1162,11 +654,7 @@ async function delSome(){
   if(!amt||amt<1){toast('Enter a valid amount','err');return;}
   if(cfg.confirmDel!==false&&!confirm('Delete '+amt+' key(s)?'))return;
   try{
-    const r=await req(API+'/api/keys',{
-      method:'DELETE',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({deleteAmount:amt})
-    });
+    const r=await req(API+'/api/keys',{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({deleteAmount:amt})});
     if(!r)return;
     const d=await r.json();
     log('Deleted '+d.deleted+' key(s).','ok');toast('Deleted '+d.deleted,'ok');
@@ -1180,11 +668,7 @@ async function delExp(){
   if(cfg.confirmDel!==false&&!confirm('Delete '+exp.length+' expired key(s)?'))return;
   let del=0;
   for(const k of exp){
-    const r=await req(API+'/api/keys',{
-      method:'DELETE',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({id:k.id})
-    });
+    const r=await req(API+'/api/keys',{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:k.id})});
     if(r)del++;
   }
   log('Deleted '+del+' expired key(s).','ok');toast('Deleted '+del+' expired','ok');
@@ -1228,18 +712,11 @@ function renderAct(){
   if(!el)return;
   if(!act.length){el.innerHTML='<div class="emp"><div class="emp-ic">◎</div>No activity yet.</div>';return;}
   const typeMap={ok:'ok',err:'err',inf:'inf',warn:'warn'};
-  el.innerHTML=act.slice(0,6).map(a=>`
-    <div class="ai">
-      <div class="a-dot ${typeMap[a.type]||'inf'}"></div>
-      <div class="aw">
-        <div class="am">${esc(a.msg)}</div>
-        <div class="at">${a.time.toLocaleTimeString()}</div>
-      </div>
-    </div>`).join('');
+  el.innerHTML=act.slice(0,6).map(a=>`<div class="ai"><div class="a-dot ${typeMap[a.type]||'inf'}"></div><div class="aw"><div class="am">${esc(a.msg)}</div><div class="at">${a.time.toLocaleTimeString()}</div></div></div>`).join('');
 }
 
 function esc(s){
-  return String(s).replace(/&/g,'&​amp;').replace(/</g,'&​lt;').replace(/>/g,'&​gt;').replace(/"/g,'&​quot;').replace(/'/g,'&​#39;');
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
 }
 
 function tbl(){
@@ -1259,26 +736,13 @@ function tbl(){
   });
   const cnt=q('keyCount');
   if(cnt)cnt.textContent='('+filtered.length+')';
-  if(!filtered.length){
-    q('tblWr').innerHTML='<div class="emp"><div class="emp-ic">◎</div>No keys found.</div>';
-    return;
-  }
+  if(!filtered.length){q('tblWr').innerHTML='<div class="emp"><div class="emp-ic">◎</div>No keys found.</div>';return;}
   const tdp=dense?'8px 16px':'13px 18px';
   const rows=filtered.map(k=>{
     const ex=k.expires_at&&new Date(k.expires_at)<now;
     const diff=k.expires_at?new Date(k.expires_at)-now:null;
-    const badge=ex
-      ?'<span class="bg bg-r">Expired</span>'
-      :k.used
-        ?'<span class="bg bg-g">Active</span>'
-        :'<span class="bg bg-n">Unused</span>';
-    const expStr=k.expires_at
-      ?(diff>0&&diff<3600000
-        ?'<span class="bg bg-r">'+Math.floor(diff/60000)+'m left</span>'
-        :diff>0&&diff<21600000
-          ?'<span class="bg bg-y">'+Math.floor(diff/3600000)+'h left</span>'
-          :'<span class="'+(ex?'dm':'')+'">'+new Date(k.expires_at).toLocaleDateString()+'</span>')
-      :'<span class="dm">Never</span>';
+    const badge=ex?'<span class="bg bg-r">Expired</span>':k.used?'<span class="bg bg-g">Active</span>':'<span class="bg bg-n">Unused</span>';
+    const expStr=k.expires_at?(diff>0&&diff<3600000?'<span class="bg bg-r">'+Math.floor(diff/60000)+'m left</span>':diff>0&&diff<21600000?'<span class="bg bg-y">'+Math.floor(diff/3600000)+'h left</span>':'<span class="'+(ex?'dm':'')+'">'+new Date(k.expires_at).toLocaleDateString()+'</span>'):'<span class="dm">Never</span>';
     const ua=shUa?(k.used_at?'<span style="font-size:12px">'+new Date(k.used_at).toLocaleString()+'</span>':'<span class="dm">—</span>'):'';
     const hw=shHw?(k.hwid?'<span class="mono">'+esc(k.hwid.substring(0,14))+'…</span>':'<span class="dm">—</span>'):'';
     const rc=cfg.rowCopy?'data-rk="'+esc(k.key)+'"':'';
@@ -1291,14 +755,7 @@ function tbl(){
       <td style="padding:${tdp}"><button class="btn btnr btn-ic" data-del="${esc(k.id)}" data-key="${esc(k.key)}">✕</button></td>
     </tr>`;
   }).join('');
-  q('tblWr').innerHTML=`<table>
-    <thead><tr>
-      <th>Key</th><th>Status</th><th>Expires</th>
-      ${shUa?'<th>Used At</th>':''}${shHw?'<th>HWID</th>':''}
-      <th></th>
-    </tr></thead>
-    <tbody>${rows}</tbody>
-  </table>`;
+  q('tblWr').innerHTML=`<table><thead><tr><th>Key</th><th>Status</th><th>Expires</th>${shUa?'<th>Used At</th>':''}${shHw?'<th>HWID</th>':''}<th></th></tr></thead><tbody>${rows}</tbody></table>`;
 }
 
 function cp(key){
@@ -1309,9 +766,7 @@ async function chkSt(){
   try{
     const r=await _f(API+'/api/health');
     const d=await r.json();
-    if(d.status==='ok'){
-      q('sDot').className='sd on';setTxt('sTxt','Online');return;
-    }
+    if(d.status==='ok'){q('sDot').className='sd on';setTxt('sTxt','Online');return;}
   }catch{}
   q('sDot').className='sd off';setTxt('sTxt','Offline');
 }
@@ -1326,103 +781,34 @@ function initEvents(){
   q('genBtn').addEventListener('click',gen);
   q('delSomeBtn').addEventListener('click',delSome);
   q('delExpBtn').addEventListener('click',delExp);
-  q('actAllBtn').addEventListener('click',()=>{
-    const n=qs('[data-pg="ac"]');if(n)nav(n);
-  });
-  q('clrOutBtn').addEventListener('click',()=>{
-    q('gnOut').innerHTML='<div class="ll"><span class="lt" style="color:var(--t4)">ready</span><span class="lin">Generated keys appear here.</span></div>';
-  });
-  q('clrLogBtn').addEventListener('click',()=>{
-    q('conEl').innerHTML='';act=[];renderAct();
-  });
-
+  q('actAllBtn').addEventListener('click',()=>{const n=qs('[data-pg="ac"]');if(n)nav(n);});
+  q('clrOutBtn').addEventListener('click',()=>{q('gnOut').innerHTML='<div class="ll"><span class="lt" style="color:var(--t4)">ready</span><span class="lin">Generated keys appear here.</span></div>';});
+  q('clrLogBtn').addEventListener('click',()=>{q('conEl').innerHTML='';act=[];renderAct();});
   qsa('.ni').forEach(ni=>ni.addEventListener('click',function(){nav(this);}));
-
   q('srchIn').addEventListener('input',tbl);
   q('fltSel').addEventListener('change',tbl);
-
   q('sAR').addEventListener('change',function(){sv('autoRefresh',this.checked);startRT();});
   q('sHW').addEventListener('change',function(){sv('showHwid',this.checked);tbl();});
   q('sUA').addEventListener('change',function(){sv('showUsedAt',this.checked);tbl();});
   q('sCF').addEventListener('change',function(){sv('confirmDel',this.checked);});
   q('sRC').addEventListener('change',function(){sv('rowCopy',this.checked);tbl();});
   q('sDT').addEventListener('change',function(){sv('dense',this.checked);tbl();});
-
   document.addEventListener('click',function(e){
     const cpb=e.target.closest('.cpb');
     if(cpb){e.stopPropagation();cp(cpb.dataset.k);return;}
     const del=e.target.closest('[data-del]');
     if(del){e.stopPropagation();delKey(del.dataset.del,del.dataset.key);return;}
     const rk=e.target.closest('[data-rk]');
-    if(rk&&cfg.rowCopy){cp(rk.dataset.rk);return;}
-    const gnOut=e.target.closest('#gnOut [data-k]');
-    if(gnOut){cp(gnOut.dataset.k);}
+    if(rk&&cfg.rowCopy){cp(rk.dataset.rk);}
   });
 }
 
 function init(){
-  if(detectTampering()){
-    document.body.innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:100vh;background:#07070b;color:#ff6b78;font-family:monospace">SECURITY VIOLATION DETECTED</div>';
-    return;
-  }
-  
   loadCfg();
   initEvents();
-  
-  try{
-    tok=localStorage.getItem(SK)||'';
-if(tok){
-      showDash();
-    }
-  }catch(e){
-    recordViolation('init_error','Initialization failed: '+e.message);
-  }
-  
+  try{tok=localStorage.getItem(SK)||'';}catch{}
+  if(tok){showDash();}
   setInterval(chkSt,30000);
-  setInterval(()=>{
-    if(detectTampering()){
-      forceLogout();
-    }
-  },5000);
-  
-  setInterval(()=>{
-    if(Date.now()-lastActivity>30*60*1000){
-      recordViolation('inactivity','Session expired due to inactivity');
-      forceLogout();
-    }
-  },60000);
-  
-  document.addEventListener('visibilitychange',()=>{
-    if(document.hidden){
-      const hiddenTime=Date.now();
-      setTimeout(()=>{
-        if(document.hidden&&Date.now()-hiddenTime>5*60*1000){
-          recordViolation('long_hidden','Tab hidden for extended period');
-          forceLogout();
-        }
-      },5*60*1000);
-    }else{
-      updateSessionActivity();
-    }
-  });
-  
-  document.addEventListener('keydown',(e)=>{
-    if(e.key==='F12'||(e.ctrlKey&&e.shiftKey&&e.key==='I')||(e.ctrlKey&&e.shiftKey&&e.key==='J')||(e.ctrlKey&&e.key==='U')){
-      e.preventDefault();
-      recordViolation('dev_tools','Developer tools shortcut detected');
-      return false;
-    }
-  });
-  
-  if(window.performance&&window.performance.memory){
-    setInterval(()=>{
-      const memory=window.performance.memory;
-      if(memory.usedJSHeapSize>memory.totalJSHeapSize*1.5){
-        recordViolation('memory_anomaly','Memory usage anomaly detected');
-        forceLogout();
-      }
-    },10000);
-  }
 }
 
 init();
