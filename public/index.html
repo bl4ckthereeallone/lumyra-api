@@ -427,92 +427,217 @@ tr:hover td{background:#0c0c14}
           </div>
         </div>
         <div class="cd">
+          <div class="ch"><div class="ct">Session</div></div>
+          <div class="cb">
+            <div class="sr"><div><div class="sl">Sign out</div><div class="sd2">End session and return to login.</div></div><button class="btn btnr btn-sm" id="soBtn2">Sign out</button></div>
+          </div>
+        </div>
+      </div>
 
-        function setupSecurityMonitoring(){
-          let mousePosition={x:0,y:0};
-          let keyboardActivity=[];
-          let copyAttempts=0;
-          let focusChanges=0;
-          let rightClickCount=0;
-          let devToolsOpen=false;
-          
-          document.addEventListener('mousemove',function(e){
-            mousePosition={x:e.clientX,y:e.clientY};
-          });
-          
-          setInterval(function(){
-            const currentPosition={x:window.mouseX||0,y:window.mouseY||0};
-            if(mousePosition.x===currentPosition.x&&mousePosition.y===currentPosition.y){
-              const inactivityTime=Date.now()-lastActivity;
-              if(inactivityTime>60000){
-                document.body.innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:100vh;background:#07070b;color:#ff6b78;font-family:monospace">SECURITY VIOLATION DETECTED</div>';
-              }
-            }
-          },1000);
-          
-          document.addEventListener('keydown',function(e){
-            keyboardActivity.push({key:e.key,time:Date.now()});
-            if(keyboardActivity.length>100){
-              document.body.innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:100vh;background:#07070b;color:#ff6b78;font-family:monospace">SECURITY VIOLATION DETECTED</div>';
-            }
-            if(e.ctrlKey&&e.shiftKey&&(e.key==='I'||e.key==='J'||e.key==='C'||e.key==='K')){
-              e.preventDefault();
-              document.body.innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:100vh;background:#07070b;color:#ff6b78;font-family:monospace">SECURITY VIOLATION DETECTED</div>';
-              return false;
-            }
-          });
-          
-          document.addEventListener('copy',function(e){
-            copyAttempts++;
-            if(copyAttempts>5){
-              e.preventDefault();
-              document.body.innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:100vh;background:#07070b;color:#ff6b78;font-family:monospace">SECURITY VIOLATION DETECTED</div>';
-            }
-          });
-          
-          document.addEventListener('visibilitychange',function(){
-            focusChanges++;
-            if(focusChanges>20){
-              document.body.innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:100vh;background:#07070b;color:#ff6b78;font-family:monospace">SECURITY VIOLATION DETECTED</div>';
-            }
-          });
-          
-          document.addEventListener('contextmenu',function(e){
-            rightClickCount++;
-            if(rightClickCount>10){
-              e.preventDefault();
-              document.body.innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:100vh;background:#07070b;color:#ff6b78;font-family:monospace">SECURITY VIOLATION DETECTED</div>';
-            }
-          });
-          
-          const checkDevTools=function(){
-            const threshold=160;
-            if(window.outerHeight-window.innerHeight>threshold||window.outerWidth-window.innerWidth>threshold){
-              if(!devToolsOpen){
-                devToolsOpen=true;
-                document.body.innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:100vh;background:#07070b;color:#ff6b78;font-family:monospace">SECURITY VIOLATION DETECTED</div>';
-              }
-            }
-          };
-          setInterval(checkDevTools,1000);
-        }
+    </div>
+  </div>
+</div>
 
-        function setupSecurityProtections(){
-          let networkRequests=0;
-          
-          setInterval(function(){
-            const currentPosition={x:window.mouseX||0,y:window.mouseY||0};
-            if(mousePosition.x===currentPosition.x&&mousePosition.y===currentPosition.y){
-              const inactivityTime=Date.now()-lastActivity;
-              if(inactivityTime>60000){
-                document.body.innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:100vh;background:#07070b;color:#ff6b78;font-family:monospace">SECURITY VIOLATION DETECTED</div>';
-              }
-            }
-          },1000);
-        }
-      </script>
-    </body>
-  </html>
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+'use strict';
+
+const _f=window.fetch.bind(window);
+const API=window.location.origin;
+const SK='_lx';
+const CK='_lcfg';
+const DEF_CFG={autoRefresh:true,showHwid:true,showUsedAt:true,confirmDel:true,rowCopy:false,dense:false};
+
+let tok='',keys=[],act=[],rT=null,toT=null;
+let cfg={...DEF_CFG};
+
+function loadCfg(){try{const c=JSON.parse(localStorage.getItem(CK)||'null');if(c)cfg={...DEF_CFG,...c};}catch{}}
+function saveCfg(){try{localStorage.setItem(CK,JSON.stringify(cfg));}catch{}}
+
+function q(id){return document.getElementById(id)}
+function qs(sel){return document.querySelector(sel)}
+function qsa(sel){return document.querySelectorAll(sel)}
+function setTxt(id,v){const e=q(id);if(e)e.textContent=v}
+
+function toast(msg,type='ok'){
+  const el=q('toast');
+  el.textContent=msg;
+  el.className='toast show '+type;
+  clearTimeout(toT);
+  toT=setTimeout(()=>{el.className='toast';},2400);
+}
+
+function showErr(msg){
+  const e=q('lErr');
+  if(!e)return;
+  e.textContent=msg;
+  e.style.display=msg?'flex':'none';
+}
+
+async function req(url,opts={}){
+  const r=await _f(url,{...opts,headers:{...(opts.headers||{}),'Authorization':'Bearer '+tok}});
+  if(r.status===401){logout();return null;}
+  return r;
+}
+
+function addAct(msg,type){
+  act.unshift({msg,type,time:new Date()});
+  if(act.length>80)act.length=80;
+  renderAct();
+}
+
+function log(msg,type){
+  const el=q('conEl');
+  if(!el)return;
+  const t=new Date().toLocaleTimeString();
+  const d=document.createElement('div');
+  d.className='ll';
+  d.innerHTML='<span class="lt">'+t+'</span><span class="l'+type+'">'+msg+'</span>';
+  el.appendChild(d);
+  if(el.children.length>200)el.removeChild(el.firstChild);
+  el.scrollTop=el.scrollHeight;
+  addAct(msg,type);
+}
+
+async function login(){
+  const pw=q('pwI').value;
+  const btn=q('lBtn');
+  showErr('');
+  if(!pw){showErr('Enter your password.');return;}
+  btn.disabled=true;
+  btn.innerHTML='<span class="spin"></span> Signing in…';
+  try{
+    const r=await _f(API+'/api/login',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({password:pw})
+    });
+    const d=await r.json();
+    if(!r.ok){
+      showErr(d.error||'Wrong password.');
+      btn.disabled=false;btn.textContent='Continue →';
+      return;
+    }
+    tok=d.token;
+    try{localStorage.setItem(SK,tok);}catch{}
+    q('pwI').value='';
+    showDash();
+  }catch{
+    showErr('Could not connect.');
+    btn.disabled=false;btn.textContent='Continue →';
+  }
+}
+
+function showDash(){
+  const lp=q('lp'),dp=q('dp');
+  lp.style.transition='opacity .3s';
+  lp.style.opacity='0';
+  setTimeout(()=>{
+    lp.classList.remove('on');
+    dp.classList.add('on');
+    lp.style.opacity='';lp.style.transition='';
+    applyCfg();load();chkSt();startRT();
+    log('Session started.','inf');
+  },280);
+}
+
+function logout(){
+  tok='';
+  try{localStorage.removeItem(SK);}catch{}
+  keys=[];act=[];
+  clearInterval(rT);
+  const dp=q('dp'),lp=q('lp');
+  dp.style.transition='opacity .25s';
+  dp.style.opacity='0';
+  setTimeout(()=>{
+    dp.classList.remove('on');
+    dp.style.opacity='';dp.style.transition='';
+    lp.classList.add('on');
+    q('lBtn').disabled=false;
+    q('lBtn').textContent='Continue →';
+    setTxt('lErr','');
+    q('lErr').style.display='none';
+  },240);
+}
+
+function nav(el){
+  qsa('.ni').forEach(n=>n.classList.remove('on'));
+  el.classList.add('on');
+  const pg=el.dataset.pg;
+  qsa('.sc').forEach(s=>s.classList.remove('on'));
+  const sc=q('sc-'+pg);
+  if(sc)sc.classList.add('on');
+  setTxt('tbPg',el.textContent.trim());
+}
+
+function sv(k,v){cfg[k]=v;saveCfg();}
+
+function applyCfg(){
+  q('sAR').checked=cfg.autoRefresh!==false;
+  q('sHW').checked=cfg.showHwid!==false;
+  q('sUA').checked=cfg.showUsedAt!==false;
+  q('sCF').checked=cfg.confirmDel!==false;
+  q('sRC').checked=!!cfg.rowCopy;
+  q('sDT').checked=!!cfg.dense;
+}
+
+function startRT(){
+  clearInterval(rT);
+  rT=setInterval(()=>{if(cfg.autoRefresh!==false)load();},30000);
+}
+
+async function load(){
+  try{
+    const r=await req(API+'/api/keys');
+    if(!r)return;
+    const data=await r.json();
+    if(!Array.isArray(data))return;
+    keys=data;
+    stats();tbl();ovStats();
+  }catch{log('Failed to load keys.','err');}
+}
+
+async function gen(){
+  const amt=Math.min(parseInt(q('gnAmt').value)||1,100);
+  const days=q('gnDays').value.trim();
+  const btn=q('genBtn');
+  btn.disabled=true;
+  btn.innerHTML='<span class="spin"></span> Generating…';
+  try{
+    const r=await req(API+'/api/keys',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({amount:amt,expiresInDays:days?parseInt(days):null})
+    });
+    if(!r){btn.disabled=false;btn.textContent='Generate Keys';return;}
+    const data=await r.json();
+    if(!Array.isArray(data)){btn.disabled=false;btn.textContent='Generate Keys';return;}
+    log('Generated '+data.length+' key(s).','ok');
+    toast('Generated '+data.length+' key(s)','ok');
+    const out=q('gnOut');out.innerHTML='';
+    data.forEach(k=>{
+      const d=document.createElement('div');d.className='ll';
+      d.innerHTML='<span class="lt lok">NEW</span><span class="km">'+esc(k.key)+'</span><button class="cpb" data-k="'+esc(k.key)+'">copy</button>';
+      out.appendChild(d);
+    });
+    out.scrollTop=out.scrollHeight;
+    await load();
+  }catch{log('Failed to generate keys.','err');toast('Failed to generate','err');}
+  btn.disabled=false;btn.textContent='Generate Keys';
+}
+
+async function delKey(id,key){
+  if(cfg.confirmDel!==false&&!confirm('Delete '+key+'?'))return;
+  try{
+    const r=await req(API+'/api/keys',{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({id})});
+    if(!r)return;
+    log('Deleted '+key+'.','ok');toast('Deleted','ok');
+    await load();
+  }catch{log('Delete failed.','err');}
+}
+
 async function delAll(){
   if(!confirm('Delete ALL '+keys.length+' keys? This cannot be undone.'))return;
   try{
