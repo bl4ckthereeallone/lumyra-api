@@ -28,7 +28,12 @@ module.exports = async function handler(req, res) {
 
   const { password } = req.body || {};
 
-  if (!password || password !== process.env.ADMIN_PASSWORD) {
+const ip = req.headers["x-forwarded-for"]?.split(",")[0]?.trim() || req.headers["x-real-ip"] || "unknown";
+const allowedIp = process.env.ALLOWED_IP;
+if (allowedIp && ip !== allowedIp) {
+  return res.status(403).json({ error: "Access denied." });
+}
+if (!password || password !== process.env.ADMIN_PASSWORD) {
     bucket.count++;
     attempts.set(ip, bucket);
     const left = MAX_ATTEMPTS - bucket.count;
