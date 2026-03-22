@@ -15,7 +15,7 @@ module.exports = async function handler(req, res) {
   if (req.method === "OPTIONS") return res.status(200).end();
   if (req.method !== "POST") return res.status(405).end();
 
-  const ip = req.headers["x-forwarded-for"]?.split(",")[0] || "unknown";
+  const ip = req.headers["x-forwarded-for"]?.split(",")[0]?.trim() || req.headers["x-real-ip"] || "unknown";
   const now = Date.now();
   const bucket = attempts.get(ip) || { count: 0, since: now };
 
@@ -26,14 +26,12 @@ module.exports = async function handler(req, res) {
     return res.status(429).json({ error: `Too many attempts. Try again in ${wait} min.` });
   }
 
-  const { password } = req.body || {};
-
-const ip = req.headers["x-forwarded-for"]?.split(",")[0]?.trim() || req.headers["x-real-ip"] || "unknown";
 const allowedIp = process.env.ALLOWED_IP;
-if (allowedIp && ip !== allowedIp) {
-  return res.status(403).json({ error: "Access denied." });
-}
-if (!password || password !== process.env.ADMIN_PASSWORD) {
+  if (allowedIp && ip !== allowedIp) {
+    return res.status(403).json({ error: "Access denied." });
+  }
+  const { password } = req.body || {};
+  if (!password || password !== process.env.ADMIN_PASSWORD) {
     bucket.count++;
     attempts.set(ip, bucket);
     const left = MAX_ATTEMPTS - bucket.count;
