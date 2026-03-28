@@ -25,11 +25,6 @@ module.exports = async function handler(req, res) {
     const wait = Math.ceil((LOCKOUT_MS - (now - bucket.since)) / 60000);
     return res.status(429).json({ error: `Too many attempts. Try again in ${wait} min.` });
   }
-
-const allowedIp = process.env.ALLOWED_IP;
-  if (allowedIp && ip !== allowedIp) {
-    return res.status(403).json({ error: "Access denied." });
-  }
   const { password } = req.body || {};
   if (!password || password !== process.env.ADMIN_PASSWORD) {
     bucket.count++;
